@@ -12,7 +12,6 @@ public class Venue {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "capacity", nullable = false)
 	private int capacity;
 
 	public Venue() {
