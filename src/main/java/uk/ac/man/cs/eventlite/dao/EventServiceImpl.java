@@ -19,6 +19,8 @@ import uk.ac.man.cs.eventlite.entities.Event;
 public class EventServiceImpl implements EventService {
 
 	private final static Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
+	
+	private EventRepository eventRepository;
 
 	private final static String DATA = "data/events.json";
 
@@ -52,4 +54,9 @@ public class EventServiceImpl implements EventService {
 
 		return events;
 	}
+
+    public EventServiceImpl(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
 }
