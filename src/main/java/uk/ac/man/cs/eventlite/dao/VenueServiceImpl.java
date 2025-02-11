@@ -19,7 +19,13 @@ public class VenueServiceImpl implements VenueService {
 
 	private final static Logger log = LoggerFactory.getLogger(VenueServiceImpl.class);
 
+	private VenueRepository venueRepository;
+
 	private final static String DATA = "data/venues.json";
+
+	public VenueServiceImpl(VenueRepository venueRepository) {
+		this.venueRepository = venueRepository;
+	}
 
 	@Override
 	public long count() {
@@ -49,6 +55,11 @@ public class VenueServiceImpl implements VenueService {
 		}
 
 		return venues;
+	}
+
+	@Override
+	public Venue save(Venue venue) {
+		return venueRepository.save(venue);
 	}
 
 }
