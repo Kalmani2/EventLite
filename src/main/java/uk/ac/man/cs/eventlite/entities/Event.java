@@ -7,22 +7,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "events")
 public class Event {
-
+	
+	@Id
 	private long id;
-
+	
+	@Column(name = "date", nullable = false) 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
-
+	
+	@Column(name = "time", nullable = false) 
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
-
+	
+	@Column(name = "name", nullable = false)
 	private String name;
-
+	
 	private long venue;
-
+	
 	public Event() {
 	}
 
