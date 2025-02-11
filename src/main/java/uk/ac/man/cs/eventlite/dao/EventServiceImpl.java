@@ -38,6 +38,11 @@ public class EventServiceImpl implements EventService {
             return new ArrayList<>(); // return empty list if errors out
         }
 	}
+	
+	@Override 
+	public Event save(Event event) {
+		return eventRepository.save(event);
+	}
 
     public EventServiceImpl(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
