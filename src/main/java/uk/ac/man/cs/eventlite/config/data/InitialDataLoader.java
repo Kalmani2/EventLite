@@ -42,13 +42,13 @@ public class InitialDataLoader {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
 				// Build and save initial events here.
-				Event concert = new Event();
-				concert.setId(1);
-				concert.setDate(LocalDate.parse("2025-08-08"));
-				concert.setTime(LocalTime.parse("08:00"));
-				concert.setName("Concert 1");
+//				Event concert = new Event();
+//				concert.setId(1);
+//				concert.setDate(LocalDate.parse("2025-08-08"));
+//				concert.setTime(LocalTime.parse("08:00"));
+//				concert.setName("Concert 1");
 				
-				eventService.save(concert);
+				eventService.save(new Event());
 			}
 		};
 	}
