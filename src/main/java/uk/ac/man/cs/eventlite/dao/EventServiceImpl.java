@@ -24,12 +24,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Iterable<Event> findAll() {
-		try {
-            return eventRepository.findAll();
-        } catch (Exception e) {
-            log.error("database has not been populated");
-            return new ArrayList<>(); // return empty list if errors out
-        }
+		return eventRepository.findAll();
 	}
 	
 	@Override 
