@@ -35,7 +35,13 @@ public class InitialDataLoader {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
 				// Build and save initial venues here.
-				
+
+				Venue stadium = new Venue();
+				stadium.setId(1);
+				stadium.setName("Old Trafford");
+				stadium.setCapacity(75000);
+				venueService.save(stadium);
+
 			}
 
 			if (eventService.count() > 0) {
@@ -48,6 +54,7 @@ public class InitialDataLoader {
 				concert.setDate(LocalDate.parse("2025-08-08"));
 				concert.setTime(LocalTime.parse("08:00"));
 				concert.setName("Concert 1");
+				concert.setVenue(1);
 				
 				eventService.save(concert);
 			}
