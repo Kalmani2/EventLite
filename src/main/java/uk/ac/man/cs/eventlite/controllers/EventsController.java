@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.entities.Event;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -35,7 +37,29 @@ public class EventsController {
 
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable("id") long id, Model model) {
-		throw new EventNotFoundException(id);
+		Event event = null;
+		for (Event e : eventService.findAll()) {
+			if (e.getId() == id) {
+				event = e;
+				break;
+			}
+		}
+		if (event == null) {
+			throw new EventNotFoundException(id);
+		}
+		
+		Venue linkedVenue = null;
+		for (Venue v : venueService.findAll()) {
+			if (v.getId() == event.getVenue()) {
+				linkedVenue = v;
+				break;
+			}
+		}
+
+		model.addAttribute("event", event);
+		model.addAttribute("venue", linkedVenue);
+		
+		return "events/event";
 	}
 
 	@GetMapping
