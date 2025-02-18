@@ -1,5 +1,8 @@
 package uk.ac.man.cs.eventlite.config.data;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Profile;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Configuration
@@ -31,17 +35,27 @@ public class InitialDataLoader {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
 				// Build and save initial venues here.
+
 				Venue stadium = new Venue();
 				stadium.setId(1);
 				stadium.setName("Old Trafford");
 				stadium.setCapacity(75000);
 				venueService.save(stadium);
+
 			}
 
 			if (eventService.count() > 0) {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
 				// Build and save initial events here.
+				Event concert = new Event();
+				concert.setId(1);
+//				concert.setVenue(1); 
+				concert.setDate(LocalDate.parse("2025-08-08"));
+				concert.setTime(LocalTime.parse("08:00"));
+				concert.setName("Concert 1");
+				
+				eventService.save(concert);
 			}
 		};
 	}
