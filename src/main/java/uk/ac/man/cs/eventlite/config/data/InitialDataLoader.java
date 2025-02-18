@@ -48,13 +48,19 @@ public class InitialDataLoader {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
 				// Build and save initial events here.
+				
+				Venue stadium = new Venue();
+				stadium.setId(1);
+				stadium.setName("Old Trafford");
+				stadium.setCapacity(75000);
+				venueService.save(stadium);
+				
 				Event concert = new Event();
 				concert.setId(1);
-//				concert.setVenue(1); 
 				concert.setDate(LocalDate.parse("2025-08-08"));
 				concert.setTime(LocalTime.parse("08:00"));
 				concert.setName("Concert 1");
-				concert.setVenue(1);
+				concert.setVenue(stadium);
 				
 				eventService.save(concert);
 			}
