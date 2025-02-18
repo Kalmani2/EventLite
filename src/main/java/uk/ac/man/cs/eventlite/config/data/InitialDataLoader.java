@@ -54,6 +54,7 @@ public class InitialDataLoader {
 				concert.setDate(LocalDate.parse("2025-08-08"));
 				concert.setTime(LocalTime.parse("08:00"));
 				concert.setName("Concert 1");
+				concert.setVenue(1);
 				
 				eventService.save(concert);
 			}
