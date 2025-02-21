@@ -50,7 +50,7 @@ public class EventsController {
 		
 		Venue linkedVenue = null;
 		for (Venue v : venueService.findAll()) {
-			if (v.getId() == event.getVenue()) {
+			if (v == event.getVenue()) {
 				linkedVenue = v;
 				break;
 			}
