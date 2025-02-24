@@ -12,7 +12,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 public class EventServiceImpl implements EventService {
 
 	private final static Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
-	
+
 	private EventRepository eventRepository;
 
 	private final static String DATA = "data/events.json";
@@ -26,14 +26,19 @@ public class EventServiceImpl implements EventService {
 	public Iterable<Event> findAll() {
 		return eventRepository.findAll();
 	}
-	
-	@Override 
+
+	@Override
 	public Event save(Event event) {
 		return eventRepository.save(event);
 	}
 
-    public EventServiceImpl(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
+	public EventServiceImpl(EventRepository eventRepository) {
+		this.eventRepository = eventRepository;
+	}
+
+	@Override
+	public Event addEvent(Event event) {
+		return save(event);
+	}
 
 }

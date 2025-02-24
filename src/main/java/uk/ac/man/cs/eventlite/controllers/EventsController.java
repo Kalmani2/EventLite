@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -47,7 +50,7 @@ public class EventsController {
 		if (event == null) {
 			throw new EventNotFoundException(id);
 		}
-		
+
 		Venue linkedVenue = null;
 		for (Venue v : venueService.findAll()) {
 			if (v == event.getVenue()) {
@@ -58,7 +61,7 @@ public class EventsController {
 
 		model.addAttribute("event", event);
 		model.addAttribute("venue", linkedVenue);
-		
+
 		return "events/event";
 	}
 
@@ -69,6 +72,22 @@ public class EventsController {
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/index";
+	}
+
+	@GetMapping("/new")
+	public String addEventForm(Model model) {
+		model.addAttribute("event", new Event());
+		model.addAttribute("venues", venueService.findAll());
+		return "events/new";
+	}
+
+	@PostMapping
+	public String createEvent(@RequestParam("venueId") long venueId, @ModelAttribute("event") Event event) {
+		Venue venue = venueService.findById(venueId);
+		event.setVenue(venue);
+
+		eventService.addEvent(event);
+		return "redirect:/events";
 	}
 
 }
