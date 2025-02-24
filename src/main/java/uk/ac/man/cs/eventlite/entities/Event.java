@@ -12,26 +12,29 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "events")
 public class Event {
-	
+
 	@Id
 	private long id;
-	
-	@Column(name = "date", nullable = false) 
+
+	@Column(name = "description", nullable = true)
+	private String description;
+
+	@Column(name = "date", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
-	
-	@Column(name = "time", nullable = false) 
+
+	@Column(name = "time", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
-	
+
 	@Column(name = "name", nullable = false)
 	private String name;
-	
+
 	@ManyToOne
 	private Venue venue;
-	
+
 	public Event() {
 	}
 
