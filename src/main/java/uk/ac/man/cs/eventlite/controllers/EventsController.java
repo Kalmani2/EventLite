@@ -20,6 +20,9 @@ import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.entities.Event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
 public class EventsController {
@@ -82,6 +85,23 @@ public class EventsController {
 
 		eventService.addEvent(event);
 		return "redirect:/events";
+	}
+
+	@GetMapping("/search")
+	public String searchEvents(@RequestParam("query") String query, Model model) {
+		Iterable<Event> events = eventService.findAll();
+		List<Event> filteredEvents = new ArrayList<>();
+
+		for (Event event : events) {
+			if (event.getName().toLowerCase().contains(query.toLowerCase())) {
+				filteredEvents.add(event);
+			}
+		}
+
+		model.addAttribute("events", filteredEvents);
+		model.addAttribute("venues", venueService.findAll());
+
+		return "events/index";
 	}
 
 }
