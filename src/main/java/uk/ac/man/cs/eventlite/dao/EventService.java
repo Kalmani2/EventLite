@@ -9,4 +9,6 @@ public interface EventService {
 	public Iterable<Event> findAll();
 	
 	public Event save(Event event);
+	
+	public Event update(Event event, long id);
 }

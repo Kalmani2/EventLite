@@ -1,22 +1,17 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.dao.EventRepository;
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
 public class EventServiceImpl implements EventService {
-
-	private final static Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
 	
 	private EventRepository eventRepository;
-
-	private final static String DATA = "data/events.json";
 
 	@Override
 	public long count() {
@@ -36,5 +31,28 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
+
+	@Override
+	public Event update(Event event, long id) {
+		Event eventDB = eventRepository.findById(id).get();
+		
+		if (Objects.nonNull(event.getName()) && !"".equalsIgnoreCase(event.getName())) {
+			eventDB.setName(event.getName());
+		}	
+		
+		if (Objects.nonNull(event.getDate())) {
+			eventDB.setDate(event.getDate());
+		}
+		
+		if (Objects.nonNull(event.getTime())) {
+			eventDB.setTime(event.getTime());
+		}
+		
+		if (Objects.nonNull(event.getVenue())) {
+			eventDB.setVenue(event.getVenue());
+		}
+		
+		return eventRepository.save(event);
+	}
 
 }
