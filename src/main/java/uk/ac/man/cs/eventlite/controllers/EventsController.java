@@ -103,5 +103,32 @@ public class EventsController {
 
 		return "events/index";
 	}
+	
+	@GetMapping("/{id}/details")
+    public String getEventDetails(@PathVariable("id") long id, Model model) {
+        Event event = null;
+        for (Event e : eventService.findAll()) {
+            if (e.getId() == id) {
+                event = e;
+                break;
+            }
+        }
+        if (event == null) {
+            throw new EventNotFoundException(id);
+        }
+
+        Venue venue = null;
+        for (Venue v : venueService.findAll()) {
+            if (v == event.getVenue()) {
+                venue = v;
+                break;
+            }
+        }
+
+        model.addAttribute("event", event);
+        model.addAttribute("venue", venue);
+
+        return "events/event_details";
+    }
 
 }
