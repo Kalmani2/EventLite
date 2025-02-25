@@ -37,6 +37,14 @@
           <td th:if="${e.venue != null}" th:text="${e.venue.name}">Event venue</td>
           <td th:text="${{e.date}}">Event date</td>
           <td th:text="${{e.time}}">Event time</td>
+		  <td>
+		    <form th:action="@{'/events/' + ${e.id}}" method="post">
+		      <input type="hidden" name="_method" value="delete"/>
+		      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+		    </form>
+		  </td>
+
         </tr>
       </tbody>
     </table>
