@@ -50,14 +50,8 @@ public class EventsController {
 		if (event == null) {
 			throw new EventNotFoundException(id);
 		}
-
-		Venue linkedVenue = null;
-		for (Venue v : venueService.findAll()) {
-			if (v == event.getVenue()) {
-				linkedVenue = v;
-				break;
-			}
-		}
+		
+		Venue linkedVenue = event.getVenue();
 
 		model.addAttribute("event", event);
 		model.addAttribute("venue", linkedVenue);
