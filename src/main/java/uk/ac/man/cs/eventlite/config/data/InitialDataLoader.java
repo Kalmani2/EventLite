@@ -35,12 +35,18 @@ public class InitialDataLoader {
 				log.info("Database already populated with venues. Skipping venue initialization.");
 			} else {
 				// Build and save initial venues here.
-
-				Venue stadium = new Venue();
-				stadium.setId(1);
-				stadium.setName("Old Trafford");
-				stadium.setCapacity(75000);
-				venueService.save(stadium);
+				
+				String[] eventNames = {"Old Trafford", "Venue A", "Venue B"};
+				int[] eventCapacity = {75000, 100, 100};
+				
+				for (int i = 0; i < eventNames.length; i++) {
+					Venue venue = new Venue();
+					int id = i + 1;
+					venue.setId(id);
+					venue.setName(eventNames[i]);
+					venue.setCapacity(eventCapacity[i]);
+					venueService.save(venue);
+				}
 
 			}
 
@@ -48,6 +54,22 @@ public class InitialDataLoader {
 				log.info("Database already populated with events. Skipping event initialization.");
 			} else {
 				// Build and save initial events here.
+				
+				String[]
+				Venue stadium = new Venue();
+				stadium.setId(1);
+				stadium.setName("Old Trafford");
+				stadium.setCapacity(75000);
+				venueService.save(stadium);
+				
+				Event concert = new Event();
+				concert.setId(1);
+				concert.setDate(LocalDate.parse("2025-08-08"));
+				concert.setTime(LocalTime.parse("08:00"));
+				concert.setName("Concert 1");
+				concert.setVenue(stadium);
+				
+				eventService.save(concert);
 				
 				Venue stadium = new Venue();
 				stadium.setId(1);
