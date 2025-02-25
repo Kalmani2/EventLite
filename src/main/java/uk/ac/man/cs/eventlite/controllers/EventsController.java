@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -53,7 +55,7 @@ public class EventsController {
 		model.addAttribute("event", event);
 		model.addAttribute("venue", linkedVenue);
 		
-		return "events/event";
+		return "events/show";
 	}
 
 	@GetMapping
@@ -63,6 +65,11 @@ public class EventsController {
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/index";
+	}
+	
+	@PutMapping("/{id}")
+	public Event updateEvent(@RequestBody Event event, @PathVariable("id") long id) {
+		return eventService.update(event, id);
 	}
 
 }

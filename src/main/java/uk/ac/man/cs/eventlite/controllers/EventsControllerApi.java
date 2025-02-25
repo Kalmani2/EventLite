@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +50,16 @@ public class EventsControllerApi {
 	public CollectionModel<EntityModel<Event>> getAllEvents() {
 		return eventAssembler.toCollectionModel(eventService.findAll())
 				.add(linkTo(methodOn(EventsControllerApi.class).getAllEvents()).withSelfRel());
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateEvent(@RequestBody Event event, @PathVariable("id") long id) {
+		if (!eventService.existsById(id)) {
+			throw new EventNotFoundException(id);
+		}
+		Event updatedEvent = eventService.update(event, id);
+		EntityModel<Event> entityModel = eventAssembler.toModel(updatedEvent);
+		
+		return ResponseEntity.ok(entityModel);
 	}
 }

@@ -1,16 +1,17 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
 public class EventServiceImpl implements EventService {
 	
+	@Autowired
 	private EventRepository eventRepository;
 
 	@Override
@@ -23,14 +24,15 @@ public class EventServiceImpl implements EventService {
 		return eventRepository.findAllByOrderByDateAscTimeAsc();
 	}
 	
+	@Override
+	public Optional<Event> findById(long id) {
+		return eventRepository.findById(id);
+	}
+	
 	@Override 
 	public Event save(Event event) {
 		return eventRepository.save(event);
 	}
-
-    public EventServiceImpl(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
 
 	@Override
 	public Event update(Event event, long id) {
@@ -53,6 +55,11 @@ public class EventServiceImpl implements EventService {
 		}
 		
 		return eventRepository.save(event);
+	}
+	
+	@Override
+	public boolean existsById(long id) {
+		return eventRepository.existsById(id);
 	}
 
 }
