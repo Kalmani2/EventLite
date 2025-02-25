@@ -78,7 +78,7 @@ public class EventsController {
 	public String addEventForm(Model model) {
 		model.addAttribute("event", new Event());
 		model.addAttribute("venues", venueService.findAll());
-		return "events/new";
+		return "events/new_event";
 	}
 
 	@PostMapping
