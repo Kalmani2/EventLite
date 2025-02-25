@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "events")
@@ -17,11 +19,13 @@ public class Event {
 	private long id;
 
 	@Column(name = "description", nullable = true)
+	@Size(max = 500)
 	private String description;
 
 	@Column(name = "date", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Future
 	private LocalDate date;
 
 	@Column(name = "time", nullable = false)
@@ -30,6 +34,7 @@ public class Event {
 	private LocalTime time;
 
 	@Column(name = "name", nullable = false)
+	@Size(max = 256)
 	private String name;
 
 	@ManyToOne
@@ -76,5 +81,13 @@ public class Event {
 
 	public void setVenue(Venue venue) {
 		this.venue = venue;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 }
