@@ -1,4 +1,4 @@
-package uk.ac.man.cs.eventlite.controllers;
+package uk.ac.man.cs.eventlite.dao;
 
 import java.util.Collections;
 
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import uk.ac.man.cs.eventlite.config.Security;
+import uk.ac.man.cs.eventlite.controllers.EventsController;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;

@@ -98,7 +98,7 @@ public class EventsController {
 
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/deleteAll")
 	public String deleteAllEvents(RedirectAttributes redirectAttrs) {
 		eventService.deleteAll();
 		redirectAttrs.addFlashAttribute("ok_message", "All events deleted.");
