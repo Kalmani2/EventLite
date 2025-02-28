@@ -1,5 +1,7 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.List;
+
 import uk.ac.man.cs.eventlite.entities.Event;
 
 public interface EventService {
@@ -27,5 +29,7 @@ public interface EventService {
 //	public void deleteAll();
 //
 //	public void deleteAll(Iterable<Event> events);
+
+	public List<Event> findAllOrderedByDateAndName();
 
 }

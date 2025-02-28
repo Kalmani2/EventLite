@@ -1,5 +1,8 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +25,6 @@ import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -98,13 +98,13 @@ public class EventsController {
 
 	}
 	
-	@DeleteMapping("/deleteAll")
-	public String deleteAllEvents(RedirectAttributes redirectAttrs) {
-		eventService.deleteAll();
-		redirectAttrs.addFlashAttribute("ok_message", "All events deleted.");
+	// @DeleteMapping("/deleteAll")
+	// public String deleteAllEvents(RedirectAttributes redirectAttrs) {
+	// 	eventService.deleteAll();
+	// 	redirectAttrs.addFlashAttribute("ok_message", "All events deleted.");
 
-		return "redirect:/events";
-	}
+	// 	return "redirect:/events";
+	// }
 
 
 	@GetMapping("/new")

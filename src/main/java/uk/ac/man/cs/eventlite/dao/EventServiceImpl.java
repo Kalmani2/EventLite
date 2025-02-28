@@ -1,15 +1,12 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//import hello.entities.Greeting;
 import uk.ac.man.cs.eventlite.entities.Event;
-import uk.ac.man.cs.eventlite.dao.EventRepository;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -74,6 +71,10 @@ public class EventServiceImpl implements EventService {
 	public void deleteAllById(Iterable<Long> ids) {
 		eventRepository.deleteAllById(ids);
 	}
-
+	
+    @Override
+    public List<Event> findAllOrderedByDateAndName() {
+        return eventRepository.findAllByOrderByDateAscTimeAsc();
+    }
     
 }

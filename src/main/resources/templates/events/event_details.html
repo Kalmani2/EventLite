@@ -14,7 +14,11 @@
     <p><strong>Venue:</strong> <span th:text="${venue != null ? venue.name : 'No venue'}">Venue Name</span></p>
     <p><strong>Description:</strong></p>
     <p th:text="${event.description}">Event Description</p> <!-- Display event description -->
-
+	  <form th:action="@{'/events/' + ${event.id}}" method="post">
+	    <input type="hidden" name="_method" value="delete"/>
+	    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+	    <button type="submit" class="btn btn-danger">Delete</button>
+	  </form>
     <a href="/events" class="btn btn-secondary">Back to Events</a>
   </div>
 </body>

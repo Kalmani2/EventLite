@@ -66,7 +66,7 @@ public class InitialDataLoader {
                 // Create first event
                 Event concert1 = new Event();
                 concert1.setId(1);
-                concert1.setDate(LocalDate.parse("2025-08-08"));
+                concert1.setDate(LocalDate.parse("2025-01-01"));
                 concert1.setTime(LocalTime.parse("08:00"));
                 concert1.setName("Concert 1");
                 concert1.setVenue(oldTrafford);
