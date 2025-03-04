@@ -1,8 +1,5 @@
 package uk.ac.man.cs.eventlite.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +22,9 @@ import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/events", produces = { MediaType.TEXT_HTML_VALUE })
@@ -56,18 +56,16 @@ public class EventsController {
 		if (event == null) {
 			throw new EventNotFoundException(id);
 		}
-		
 
 		Venue linkedVenue = event.getVenue();
 
-//		Venue linkedVenue = null;
-//		for (Venue v : venueService.findAll()) {
-//			if (v.getId() == event.getVenue().getId()) {
-//				linkedVenue = v;
-//				break;
-//			}
-//		}
-
+		// Venue linkedVenue = null;
+		// for (Venue v : venueService.findAll()) {
+		// if (v.getId() == event.getVenue().getId()) {
+		// linkedVenue = v;
+		// break;
+		// }
+		// }
 
 		model.addAttribute("event", event);
 		model.addAttribute("venue", linkedVenue);
@@ -83,31 +81,30 @@ public class EventsController {
 
 		return "events/index";
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public String deleteEvent(@PathVariable("id") long id, RedirectAttributes redirectAttrs) {
-		
+
 		if (!eventService.existsById(id)) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found") ;
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
 		}
-		
+
 		eventService.deleteById(id);
 		redirectAttrs.addFlashAttribute("ok_message", "Event deleted.");
 
 		return "redirect:/events";
 
 	}
-	
-	// @DeleteMapping("/deleteAll")
-	// public String deleteAllEvents(RedirectAttributes redirectAttrs) {
-	// 	eventService.deleteAll();
-	// 	redirectAttrs.addFlashAttribute("ok_message", "All events deleted.");
 
-	// 	return "redirect:/events";
-	// }
+	@DeleteMapping
+	public String deleteAllEvents(RedirectAttributes redirectAttrs) {
+		eventService.deleteAll();
+		redirectAttrs.addFlashAttribute("ok_message", "All events deleted.");
 
+		return "redirect:/events";
+	}
 
-	@GetMapping("/new")
+	@GetMapping("/new_event")
 	public String addEventForm(Model model) {
 		model.addAttribute("event", new Event());
 		model.addAttribute("venues", venueService.findAll());
@@ -139,33 +136,32 @@ public class EventsController {
 
 		return "events/index";
 	}
-	
+
 	@GetMapping("/{id}/details")
-    public String getEventDetails(@PathVariable("id") long id, Model model) {
-        Event event = null;
-        for (Event e : eventService.findAll()) {
-            if (e.getId() == id) {
-                event = e;
-                break;
-            }
-        }
-        if (event == null) {
-            throw new EventNotFoundException(id);
-        }
+	public String getEventDetails(@PathVariable("id") long id, Model model) {
+		Event event = null;
+		for (Event e : eventService.findAll()) {
+			if (e.getId() == id) {
+				event = e;
+				break;
+			}
+		}
+		if (event == null) {
+			throw new EventNotFoundException(id);
+		}
 
-        Venue venue = null;
-        for (Venue v : venueService.findAll()) {
-            if (v == event.getVenue()) {
-                venue = v;
-                break;
-            }
-        }
+		Venue venue = null;
+		for (Venue v : venueService.findAll()) {
+			if (v == event.getVenue()) {
+				venue = v;
+				break;
+			}
+		}
 
-        model.addAttribute("event", event);
-        model.addAttribute("venue", venue);
+		model.addAttribute("event", event);
+		model.addAttribute("venue", venue);
 
-        return "events/event_details";
-    }
+		return "events/event_details";
+	}
 
 }
-
