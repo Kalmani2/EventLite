@@ -53,33 +53,53 @@ public class InitialDataLoader {
                 log.info("Database already populated with events. Skipping event initialization.");
             } else {
                 // Retrieve the "Old Trafford" venue (assumed to have ID 1)
-                Venue oldTrafford = venueService.findById(1);
-                if (oldTrafford == null) {
-                    log.error("Old Trafford venue not found. Creating new instance.");
-                    oldTrafford = new Venue();
-                    oldTrafford.setId(1);
-                    oldTrafford.setName("Old Trafford");
-                    oldTrafford.setCapacity(75000);
-                    venueService.save(oldTrafford);
-                }
-
+//                Venue oldTrafford = venueService.findById(1);
+//                if (oldTrafford == null) {
+//                    log.error("Old Trafford venue not found. Creating new instance.");
+//                    oldTrafford = new Venue();
+//                    oldTrafford.setId(1);
+//                    oldTrafford.setName("Old Trafford");
+//                    oldTrafford.setCapacity(75000);
+//                    venueService.save(oldTrafford);
+//                }
+            	
+            	Venue oldTrafford = venueService.findById(1);
+            	Venue venueA = venueService.findById(2);
+            	Venue venueB = venueService.findById(3);
+            	
+            	String[] eventNames = {"Concert1", "Event Alpha", "Beta", "Apple", "Former", "Previous", "Past"};
+            	String[] eventDate = {"2025-01-01", "2025-07-11", "2025-07-11", "2025-07-12", "2025-01-11", "2025-01-11", "2025-01-10"};
+            	String[] eventTime = {"08:00", "12:30", "10:00", null, "11:00", "18:30", "17:00"};
+            	Venue[] eventVenue = {oldTrafford, venueB, venueA, venueA, venueB, venueA, venueA};
+            	
+            	for (int i = 0; i < eventNames.length; i++) {
+                    Event event = new Event();
+                    // Assuming IDs are managed manually here:
+                    event.setId(i + 1);
+                    event.setName(eventNames[i]);
+                    event.setDate(LocalDate.parse(eventDate[i]));
+                    event.setTime(LocalTime.parse(eventTime[i]));
+                    event.setVenue(eventVenue[i]);
+                    eventService.save(event);
+            	}
+            	
                 // Create first event
-                Event concert1 = new Event();
-                concert1.setId(1);
-                concert1.setDate(LocalDate.parse("2025-01-01"));
-                concert1.setTime(LocalTime.parse("08:00"));
-                concert1.setName("Concert 1");
-                concert1.setVenue(oldTrafford);
-                eventService.save(concert1);
-
-                // Create second event
-                Event concert2 = new Event();
-                concert2.setId(2);
-                concert2.setDate(LocalDate.parse("2025-08-08"));
-                concert2.setTime(LocalTime.parse("08:00"));
-                concert2.setName("Concert 2");
-                concert2.setVenue(oldTrafford);
-                eventService.save(concert2);
+//                Event concert1 = new Event();
+//                concert1.setId(1);
+//                concert1.setDate(LocalDate.parse("2025-01-01"));
+//                concert1.setTime(LocalTime.parse("08:00"));
+//                concert1.setName("Concert 1");
+//                concert1.setVenue(oldTrafford);
+//                eventService.save(concert1);
+//
+//                // Create second event
+//                Event concert2 = new Event();
+//                concert2.setId(2);
+//                concert2.setDate(LocalDate.parse("2025-08-08"));
+//                concert2.setTime(LocalTime.parse("08:00"));
+//                concert2.setName("Concert 2");
+//                concert2.setVenue(oldTrafford);
+//                eventService.save(concert2);
             }
         };
     }
