@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Size;
 public class Event {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@Column(name = "description", nullable = true)
