@@ -33,30 +33,25 @@ public class Security {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-				// By default, all requests are authenticated except our specific list.
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers(NO_AUTH).permitAll().anyRequest().hasRole(ADMIN_ROLE))
+		// By default, all requests are authenticated except our specific list.
+		.authorizeHttpRequests(
+				auth -> auth.requestMatchers(NO_AUTH).permitAll().anyRequest().hasRole(ADMIN_ROLE))
 
-				// This makes testing easier. Given we're not going into production, that's OK.
-				.sessionManagement(session -> session.requireExplicitAuthenticationStrategy(false))
+		// This makes testing easier. Given we're not going into production, that's OK.
+		.sessionManagement(session -> session.requireExplicitAuthenticationStrategy(false))
 
-				// Use form login/logout for the Web.
-				.formLogin(login -> login.loginPage("/sign-in").permitAll())
-				.logout(logout -> logout.logoutUrl("/sign-out").logoutSuccessUrl("/").permitAll())
+		// Use form login/logout for the Web.
+		.formLogin(login -> login.loginPage("/sign-in").permitAll())
+		.logout(logout -> logout.logoutUrl("/sign-out").logoutSuccessUrl("/").permitAll())
 
-				// Use HTTP basic for the API.
-				.httpBasic(withDefaults()).securityMatcher(antMatcher("/api/**"))
+		// Use HTTP basic for the API.
+		.httpBasic(withDefaults()).securityMatcher(antMatcher("/api/**"))
 
-				// Only use CSRF for Web requests.
-				// Disable CSRF for the API and H2 console.
-				.csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher("/api/**"), H2_CONSOLE))
-				.securityMatcher(antMatcher("/**"))
+		// Only use CSRF for Web requests.
+		.csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher("/api/**"))).securityMatcher(antMatcher("/**"));
 
-				// Disable X-Frame-Options for the H2 console.
-				.headers(headers -> headers.frameOptions(frameOpts -> frameOpts.disable()));
+return http.build();}
 
-		return http.build();
-	}
 
 	@Bean
 	public UserDetailsService userDetailsService() {

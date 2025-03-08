@@ -7,7 +7,7 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 
 @Service
 public class VenueServiceImpl implements VenueService {
-	
+
 	@Autowired
 	private VenueRepository venueRepository;
 
@@ -24,6 +24,11 @@ public class VenueServiceImpl implements VenueService {
 	@Override
 	public Venue save(Venue venue) {
 		return venueRepository.save(venue);
+	}
+
+	@Override
+	public Venue findById(long id) {
+		return venueRepository.findById(id).orElse(null);
 	}
 
 }

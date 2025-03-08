@@ -10,6 +10,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,4 +63,17 @@ public class EventsControllerApi {
 		
 		return ResponseEntity.ok(entityModel);
 	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteGreeting(@PathVariable("id") long id) {
+		
+		if (!eventService.existsById(id)) {
+			throw new EventNotFoundException(id);
+		}
+
+		eventService.deleteById(id);
+
+		return ResponseEntity.noContent().build();
+	}
+
 }

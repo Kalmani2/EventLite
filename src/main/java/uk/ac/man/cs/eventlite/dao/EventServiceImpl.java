@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ public class EventServiceImpl implements EventService {
 	
 	@Autowired
 	private EventRepository eventRepository;
+
+//	private final static String DATA = "data/events.json";
 
 	@Override
 	public long count() {
@@ -32,6 +35,11 @@ public class EventServiceImpl implements EventService {
 	@Override 
 	public Event save(Event event) {
 		return eventRepository.save(event);
+	}
+
+	@Override
+	public Event addEvent(Event event) {
+		return save(event);
 	}
 
 	@Override
@@ -56,10 +64,40 @@ public class EventServiceImpl implements EventService {
 		
 		return eventRepository.save(event);
 	}
-	
-	@Override
+
+    @Override
 	public boolean existsById(long id) {
 		return eventRepository.existsById(id);
 	}
+    
+    @Override
+	public void delete(Event event) {
+		eventRepository.delete(event);
+	}
 
+	@Override
+	public void deleteById(long id) {
+		eventRepository.deleteById(id);
+	}
+
+	@Override
+	public void deleteAll() {
+		eventRepository.deleteAll();
+	}
+
+	@Override
+	public void deleteAll(Iterable<Event> event) {
+		eventRepository.deleteAll(event);
+	}
+
+	@Override
+	public void deleteAllById(Iterable<Long> ids) {
+		eventRepository.deleteAllById(ids);
+	}
+	
+    @Override
+    public List<Event> findAllOrderedByDateAndName() {
+        return eventRepository.findAllByOrderByDateAscTimeAsc();
+    }
+    
 }
