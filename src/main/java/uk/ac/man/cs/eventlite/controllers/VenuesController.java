@@ -5,8 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.man.cs.eventlite.dao.VenueService;
+import uk.ac.man.cs.eventlite.entities.Venue;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/venues")
@@ -16,10 +20,15 @@ public class VenuesController {
     private VenueService venueService;
 
     @GetMapping
-    public String getVenues(Model model) {
+    public String getAllVenues(Model model) {
         model.addAttribute("venues", venueService.findAll());
         return "venues/index";
     }
 
-
+    @GetMapping("/search")
+    public String searchVenues(@RequestParam("query") String query, Model model) {
+        List<Venue> filteredVenues = venueService.findByNameContainingIgnoreCase(query);
+        model.addAttribute("venues", filteredVenues);
+        return "venues/index";
+    }
 }

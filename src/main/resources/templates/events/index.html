@@ -7,6 +7,7 @@
 </head>
 <body>
   <div layout:fragment="content">
+    <a href="/venues" class="btn btn-primary">View Venues</a>
     <div id="Header" class="container-fluid">
       <div class="row align-items-center">
         <a class="btn btn-primary" role="button" href="/events/new_event">
@@ -24,7 +25,7 @@
       </div>
     </div>
     
-    <!-- Upcoming Events Section -->
+    <!-- upcoming events -->
     <h2>Upcoming events:</h2>
     <div th:if="${events.?[date.isAfter(T(java.time.LocalDate).now())].size() > 0}">
       <table class="table table-striped table-hover">
@@ -50,7 +51,7 @@
       <p class="text-muted">There are no upcoming events.</p>
     </div>
 
-    <!-- Previous Events Section -->
+    <!-- Previous Events -->
     <h2>Previous events:</h2>
     <div th:if="${events.?[date.isBefore(T(java.time.LocalDate).now())].size() > 0}">
       <table class="table table-striped table-hover">
