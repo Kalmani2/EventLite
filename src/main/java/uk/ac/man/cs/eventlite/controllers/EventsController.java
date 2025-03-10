@@ -85,8 +85,9 @@ public class EventsController {
 	}
 	
 	@PutMapping("/{id}")
-	public Event updateEvent(@RequestBody Event event, @PathVariable("id") long id) {
-		return eventService.update(event, id);
+	public String updateEvent(@RequestBody Event event, @PathVariable("id") long id) {
+		eventService.update(event, id);
+		return "redirect:/events";
 	}
 
 	@DeleteMapping("/{id}")
