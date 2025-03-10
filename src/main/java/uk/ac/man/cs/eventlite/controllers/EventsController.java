@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javassist.NotFoundException;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
@@ -80,6 +82,16 @@ public class EventsController {
 		model.addAttribute("venues", venueService.findAll());
 
 		return "events/index";
+	}
+	
+	@PutMapping("/{id}")
+	public String updateEvent(@ModelAttribute Event event, @PathVariable("id") long id, RedirectAttributes redirectAttrs){
+
+		eventService.update(event, id);
+
+		redirectAttrs.addFlashAttribute("ok_message", "Event updated.");
+
+		return "redirect:/events";
 	}
 
 	@DeleteMapping("/{id}")
@@ -160,6 +172,7 @@ public class EventsController {
 
 		model.addAttribute("event", event);
 		model.addAttribute("venue", venue);
+		model.addAttribute("venues", venueService.findAll());
 
 		return "events/event_details";
 	}

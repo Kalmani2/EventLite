@@ -27,7 +27,8 @@ public class Security {
 	// List the mappings/methods for which no authorisation is required.
 	// By default we allow all GETs and full access to the H2 console.
 	private static final RequestMatcher[] NO_AUTH = { antMatcher(HttpMethod.GET, "/webjars/**"),
-			antMatcher(HttpMethod.GET, "/**"), H2_CONSOLE };
+			antMatcher(HttpMethod.GET, "/**"), H2_CONSOLE ,
+			antMatcher(HttpMethod.GET, "/events"), antMatcher(HttpMethod.GET, "/events/{id:[\\d]+}")};
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
