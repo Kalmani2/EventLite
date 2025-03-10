@@ -75,6 +75,10 @@
     <div th:if="${events.?[date.isBefore(T(java.time.LocalDate).now())].empty}">
       <p class="text-muted">There are no previous events.</p>
     </div>
+
+    <div th:if="${ok_message}" class="alert alert-success">
+      <span th:text="${ok_message}"></span>
+  </div>
     
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
