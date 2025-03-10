@@ -85,8 +85,11 @@ public class EventsController {
 	}
 	
 	@PutMapping("/{id}")
-	public String updateEvent(@RequestBody Event event, @PathVariable("id") long id) {
+	public String updateEvent(@RequestBody Event event, @PathVariable("id") long id, RedirectAttributes redirectAttrs) {
 		eventService.update(event, id);
+
+		redirectAttrs.addFlashAttribute("ok_message", "Event edited.");
+
 		return "redirect:/events";
 	}
 
