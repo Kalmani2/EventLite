@@ -1,43 +1,54 @@
 package uk.ac.man.cs.eventlite.entities;
 
-import jakarta.persistence.*;;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "venues")
 public class Venue {
 
-	@Id
-	private long id;
+    @Id
+    private long id;
 
-	@Column(name = "name", nullable = false)
-	private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-	private int capacity;
+    private int capacity;
 
-	public Venue() {
-	}
+    @Column(name = "address", nullable = true)
+    private String address;
 
-	public long getId() {
-		return id;
-	}
+    public Venue() {
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getCapacity() {
-		return capacity;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

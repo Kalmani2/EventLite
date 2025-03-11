@@ -1,4 +1,4 @@
-package uk.ac.man.cs.eventlite.dao;
+package uk.ac.man.cs.eventlite.controllers;
 
 import java.util.Collections;
 
