@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
@@ -64,6 +67,26 @@ public class VenuesController {
         // Proceed to delete the venue
         venueService.deleteById(id);
         redirectAttrs.addFlashAttribute("ok_message", "Venue deleted.");
+        return "redirect:/venues"; // Redirect to the venues index page
+    }
+
+    @PutMapping("/{id}")
+    public String updateVenue(@PathVariable("id") long id, @ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
+        // Retrieve the existing venue
+        Venue existingVenue = venueService.findById(id);
+        if (existingVenue == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found");
+        }
+
+        // Update the existing venue's properties
+        existingVenue.setName(venue.getName());
+        existingVenue.setAddress(venue.getAddress());
+        existingVenue.setCapacity(venue.getCapacity());
+        // Add any other properties you need to update
+
+        // Save the updated venue
+        venueService.save(existingVenue);
+        redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
         return "redirect:/venues"; // Redirect to the venues index page
     }
 }
