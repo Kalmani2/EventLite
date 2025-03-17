@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{../templates/layouts/default}">
+
 <head>
   <title>EventLite Home</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -10,22 +13,22 @@
   <style>
     .container {
       text-align: center;
-      margin-top: 50px;
-    }
-    .btn {
       margin-top: 20px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Welcome to EventLite</h1>
-    <p>Discover and manage your events with ease.</p>
-    <a class="btn btn-primary" href="/events">View Events</a>
-    <a class="btn btn-secondary" href="/venues">View Venues</a>
-  </div>
+  <div layout:fragment="content" class="container">
 
+    <div>
+      <h1>Welcome to EventLite</h1>
+      <p>Discover and manage your events with ease.</p>
+      <a class="btn btn-primary" href="/events">View Events</a>
+      <a class="btn btn-secondary" href="/venues">View Venues</a>
+    </div>
+
+  </div>
   <script type="text/javascript" src="/webjars/popper.js/umd/popper.min.js"></script>
   <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
