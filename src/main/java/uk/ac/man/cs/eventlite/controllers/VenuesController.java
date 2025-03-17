@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
 
@@ -25,7 +27,7 @@ public class VenuesController {
     }
 
     @GetMapping("/search")
-    public String searchVenues(String query, Model model) {
+    public String searchVenues(@RequestParam("query") String query, Model model) {
         model.addAttribute("venues", venueService.findByNameContainingIgnoreCase(query));
         return "venues/index";
     }
