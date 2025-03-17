@@ -1,11 +1,11 @@
 package uk.ac.man.cs.eventlite.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uk.ac.man.cs.eventlite.entities.Venue;
-
-import java.util.List;
 
 @Service
 public class VenueServiceImpl implements VenueService {
@@ -37,5 +37,15 @@ public class VenueServiceImpl implements VenueService {
     public List<Venue> findByNameContainingIgnoreCase(String name) {
         return venueRepository.findByNameContainingIgnoreCase(name);
     }
+
+	@Override
+	public boolean existsById(long id) {
+		return venueRepository.existsById(id);
+	}
+
+	@Override
+	public void deleteById(long id) {
+		venueRepository.deleteById(id);
+	}
 
 }

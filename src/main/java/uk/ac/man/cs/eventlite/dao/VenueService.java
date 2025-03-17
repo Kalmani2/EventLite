@@ -1,7 +1,8 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import uk.ac.man.cs.eventlite.entities.Venue;
 import java.util.List;
+
+import uk.ac.man.cs.eventlite.entities.Venue;
 
 public interface VenueService {
 
@@ -14,4 +15,8 @@ public interface VenueService {
 	public Venue findById(long id);
 
 	public List<Venue> findByNameContainingIgnoreCase(String name);
+
+	boolean existsById(long id);
+
+	void deleteById(long id);
 }

@@ -1,8 +1,7 @@
 package uk.ac.man.cs.eventlite.dao;
 
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 import uk.ac.man.cs.eventlite.entities.Event;
 
@@ -37,5 +36,7 @@ public interface EventService {
 //	public void deleteAll(Iterable<Event> events);
 
 	public List<Event> findAllOrderedByDateAndName();
+
+	boolean existsByVenueId(long venueId);
 
 }

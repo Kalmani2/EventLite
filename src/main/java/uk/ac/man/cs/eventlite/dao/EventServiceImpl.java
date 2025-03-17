@@ -100,4 +100,8 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAllByOrderByDateAscTimeAsc();
     }
     
+    @Override
+    public boolean existsByVenueId(long venueId) {
+        return eventRepository.existsByVenueId(venueId);
+    }
 }
