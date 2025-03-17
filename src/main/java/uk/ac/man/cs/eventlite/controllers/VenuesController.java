@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
@@ -87,6 +87,19 @@ public class VenuesController {
         // Save the updated venue
         venueService.save(existingVenue);
         redirectAttrs.addFlashAttribute("ok_message", "Venue updated.");
+        return "redirect:/venues"; // Redirect to the venues index page
+    }
+
+    @GetMapping("/new_venue")
+    public String addVenueForm(Model model) {
+        model.addAttribute("venue", new Venue());
+        return "venues/new_venue"; // Ensure this points to the correct Thymeleaf template
+    }
+
+    @PostMapping
+    public String createVenue(@ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
+        venueService.save(venue); // Save the new venue
+        redirectAttrs.addFlashAttribute("ok_message", "Venue created successfully.");
         return "redirect:/venues"; // Redirect to the venues index page
     }
 }
