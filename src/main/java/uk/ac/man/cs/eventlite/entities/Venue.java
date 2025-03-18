@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Venue {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "name", nullable = false)
