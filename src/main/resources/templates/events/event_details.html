@@ -57,17 +57,17 @@
                     
                     <div class="mb-3">
                       <label class="form-label">Event Name</label>
-                      <input type="text" class="form-control" name="name" th:value="${event.name}" required>
+                      <input type="text" class="form-control" name="name" th:value="${event.name}" required maxlength="256">
                     </div>
 
                     <div class="mb-3">
                       <label class="form-label">Date</label>
-                      <input type="date" class="form-control" name="date" th:value="${event.date}" required>
+                      <input type="date" class="form-control" name="date" th:value="${event.date}" required th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
                     </div>
 
                     <div class="mb-3">
                       <label class="form-label">Time</label>
-                      <input type="time" class="form-control" name="time" th:value="${event.time}" required>
+                      <input type="time" class="form-control" name="time" th:value="${event.time}">
                     </div>
 
                     <div class="mb-3">
@@ -79,7 +79,7 @@
 
                     <div class="mb-3">
                       <label class="form-label">Description</label>
-                      <textarea class="form-control" name="description" rows="3" required th:text="${event.description}"></textarea>
+                      <textarea class="form-control" name="description" rows="3" th:text="${event.description}" maxlength="500"></textarea>
                     </div>
 
                     <div class="modal-footer">
