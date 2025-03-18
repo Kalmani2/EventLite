@@ -29,7 +29,7 @@ public class Event {
 	@Future
 	private LocalDate date;
 
-	@Column(name = "time", nullable = false)
+	@Column(name = "time", nullable = true)
 	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime time;
