@@ -37,14 +37,16 @@ public class InitialDataLoader {
             } else {
                 String[] venueNames = { "Old Trafford", "Venue A", "Venue B" };
                 int[] venueCapacities = { 75000, 100, 100 };
-                String[] venueAddressess = {"Stretford, Manchester M16 0RA", "123 Happy Street", "321 Sad Avenue"};
+                String[] venueRoadAddresses = {"Stretford, Manchester M16 0RA", "123 Happy Street", "321 Sad Avenue"};
+                String[] venuePostcodes = {"M16 0RA", "HAPPY123", "SAD321"};
 
                 for (int i = 0; i < venueNames.length; i++) {
                     Venue venue = new Venue();
                     // Assuming IDs are managed manually here:
-                    venue.setId(i + 1);
+                    venue.setId((long) (i + 1));
                     venue.setName(venueNames[i]);
-                    venue.setAddress(venueAddressess[i]);                    
+                    venue.setRoadAddress(venueRoadAddresses[i]);
+                    venue.setPostcode(venuePostcodes[i]);
                     venue.setCapacity(venueCapacities[i]);
                     venueService.save(venue);
                 }
