@@ -12,7 +12,16 @@
       <h1 class="text-primary" th:text="${venue.name}">Venue Name</h1>
       
       <hr>
-      
+      <h2>Upcoming Events</h2>
+      <div th:if="${upcomingEvents.isEmpty()}">
+          <p>No upcoming events at this venue.</p>
+      </div>
+      <ul th:unless="${upcomingEvents.isEmpty()}">
+          <li th:each="event : ${upcomingEvents}">
+              <a th:href="@{/events/{id}/details(id=${event.id})}" th:text="${event.name}"></a> - 
+              <span th:text="${event.date} + ' ' + ${event.time}"></span>
+          </li>
+      </ul>
       <p>
         <strong><i class="fa-solid fa-building"></i> Capacity:</strong> 
         <span th:text="${venue.capacity}" class="text-muted">Venue Capacity</span>
@@ -23,6 +32,7 @@
         <span th:text="${venue.address}" class="text-muted">Venue Address</span>
       </p>
 
+	  
       <div class="d-flex justify-content-between mt-4">
         <a href="/venues" class="btn btn-secondary">
           <i class="fa-solid fa-arrow-left"></i> Back to Venues
@@ -31,6 +41,8 @@
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editVenueModal">
             <i class="fa-solid fa-pencil-square"></i> Edit
           </button>
+		  
+		  
           <div class="modal fade" id="editVenueModal" tabindex="-1" aria-labelledby="editVenueModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -38,6 +50,7 @@
                   <h1 class="modal-title fs-5" id="editVenueModalLabel">Edit Venue</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+				
                 <div class="modal-body">
                   <form th:action="@{/venues/{id}(id=${venue.id})}" method="post">
                     <input type="hidden" name="_method" value="put"/>
@@ -67,6 +80,8 @@
               </div>
             </div>
           </div>
+		  
+		  
 
           <form th:action="@{/venues/{id}(id=${venue.id})}" method="post">
             <input type="hidden" name="_method" value="delete"/>

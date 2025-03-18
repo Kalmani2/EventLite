@@ -1,5 +1,11 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.entities.Event;
 
 @Controller
 @RequestMapping("/venues")
@@ -47,7 +54,32 @@ public class VenuesController {
         if (venue == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found");
         }
+
+        Iterable<Event> allEvents = eventService.findAll();
+
+        List<Event> venueEvents = new ArrayList<>();
+        for (Event event : allEvents) {
+            if (event.getVenue() != null && event.getVenue().getId() == id) {
+                venueEvents.add(event);
+            }
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+        List<Event> upcomingEvents = venueEvents.stream()
+            .filter(event -> event.getDate().isAfter(today) || 
+                             (event.getDate().isEqual(today) && event.getTime().isAfter(now)))
+            .collect(Collectors.toList());
+
+        upcomingEvents.sort((e1, e2) -> {
+            if (e1.getDate().equals(e2.getDate())) {
+                return e1.getTime().compareTo(e2.getTime());
+            }
+            return e1.getDate().compareTo(e2.getDate());
+        });
+
         model.addAttribute("venue", venue);
+        model.addAttribute("upcomingEvents", upcomingEvents);
         return "venues/venue_details";
     }
 
