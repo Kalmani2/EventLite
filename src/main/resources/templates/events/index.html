@@ -46,9 +46,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="e : ${events}" th:if="${e.date != null and e.date.isAfter(T(java.time.LocalDate).now())}">
+                    <tr th:each="e : ${events}" th:if="${e.date != null and e.date.isAfter(T(java.time.LocalDate).now())}" th>
                         <td><a th:href="@{/events/{id}/details(id=${e.id})}" class="text-decoration-none" th:text="${e.name}">Event Name</a></td>
-                        <td th:text="${e.venue.name}">Venue</td>
+                        <td><a th:href="@{/venues/{id}/details(id=${e.venue.id})}" class="text-decoration-none" th:text="${e.venue.name}">Venue</a></td>
                         <td th:text="${e.date}">Event Date</td>
                         <td th:text="${e.time}">Event Time</td>
                     </tr>

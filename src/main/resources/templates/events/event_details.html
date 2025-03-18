@@ -28,7 +28,9 @@
       </div>
 
       <p><strong><i class="fa-solid fa-map-marker-alt"></i> Venue:</strong> 
-        <span th:text="${venue != null ? venue.name : 'No venue'}" class="text-muted">Venue Name</span>
+        <span>
+          <a th:href="@{/venues/{id}/details(id=${event.venue.id})}" class="text-decoration-none" th:text="${event.venue.name}">Venue Name</a>
+        </span>
       </p>
 
       <div class="mt-3">
