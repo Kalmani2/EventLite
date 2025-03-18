@@ -23,8 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
-import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.entities.Event;
 
 @Controller
 @RequestMapping("/venues")
@@ -116,9 +116,9 @@ public class VenuesController {
 
         // Update the existing venue's properties
         existingVenue.setName(venue.getName());
-        existingVenue.setRoadAddress(venue.getRoadAddress());
-        existingVenue.setPostcode(venue.getPostcode());
+        existingVenue.setAddress(venue.getAddress());
         existingVenue.setCapacity(venue.getCapacity());
+        // Add any other properties you need to update
 
         // Save the updated venue
         venueService.save(existingVenue);

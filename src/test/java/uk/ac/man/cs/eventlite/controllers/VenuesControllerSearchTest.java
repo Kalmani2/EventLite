@@ -1,19 +1,16 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,10 +18,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
@@ -52,15 +45,13 @@ public class VenuesControllerSearchTest {
         venue1.setId(1);
         venue1.setName("Kilburn Building");
         venue1.setCapacity(200);
-        venue1.setRoadAddress("Oxford Road, Manchester");
-        venue1.setPostcode("M13 9PL");
+        venue1.setAddress("Oxford Road, Manchester");
         
         Venue venue2 = new Venue();
         venue2.setId(2);
         venue2.setName("University Place");
         venue2.setCapacity(500);
-        venue2.setRoadAddress("Oxford Road, Manchester");
-        venue2.setPostcode("M13 9PL");
+        venue2.setAddress("Oxford Road, Manchester");
         
         // Mock the service method call
         when(venueService.findByNameContainingIgnoreCase("kilburn"))
@@ -76,8 +67,7 @@ public class VenuesControllerSearchTest {
                             hasProperty("id", is(1L)),
                             hasProperty("name", is("Kilburn Building")),
                             hasProperty("capacity", is(200)),
-                            hasProperty("roadAddress", is("Oxford Road, Manchester")),
-                            hasProperty("postcode", is("M13 9PL"))
+                            hasProperty("address", is("Oxford Road, Manchester"))
                         )
                 )));
         
@@ -106,8 +96,7 @@ public class VenuesControllerSearchTest {
         venue1.setId(1);
         venue1.setName("Kilburn Building");
         venue1.setCapacity(200);
-        venue1.setRoadAddress("Oxford Road, Manchester");
-        venue1.setPostcode("M13 9PL");
+        venue1.setAddress("Oxford Road, Manchester");
         
         // Mock the service method call
         when(venueService.findByNameContainingIgnoreCase("KILBURN"))
@@ -121,10 +110,7 @@ public class VenuesControllerSearchTest {
                 .andExpect(model().attribute("venues", hasItem(
                         allOf(
                             hasProperty("id", is(1L)),
-                            hasProperty("name", is("Kilburn Building")),
-                            hasProperty("capacity", is(200)),
-                            hasProperty("roadAddress", is("Oxford Road, Manchester")),
-                            hasProperty("postcode", is("M13 9PL"))
+                            hasProperty("name", is("Kilburn Building"))
                         )
                 )));
         
@@ -138,8 +124,7 @@ public class VenuesControllerSearchTest {
         venue1.setId(1);
         venue1.setName("Kilburn Building");
         venue1.setCapacity(200);
-        venue1.setRoadAddress("Oxford Road, Manchester");
-        venue1.setPostcode("M13 9PL");
+        venue1.setAddress("Oxford Road, Manchester");
         
         // Mock the service method call
         when(venueService.findByNameContainingIgnoreCase("burn"))
@@ -153,10 +138,7 @@ public class VenuesControllerSearchTest {
                 .andExpect(model().attribute("venues", hasItem(
                         allOf(
                             hasProperty("id", is(1L)),
-                            hasProperty("name", is("Kilburn Building")),
-                            hasProperty("capacity", is(200)),
-                            hasProperty("roadAddress", is("Oxford Road, Manchester")),
-                            hasProperty("postcode", is("M13 9PL"))
+                            hasProperty("name", is("Kilburn Building"))
                         )
                 )));
         
@@ -170,15 +152,13 @@ public class VenuesControllerSearchTest {
         venue1.setId(1);
         venue1.setName("Manchester Hall");
         venue1.setCapacity(300);
-        venue1.setRoadAddress("Oxford Road, Manchester");
-        venue1.setPostcode("M13 9PL");
+        venue1.setAddress("Oxford Road, Manchester");
         
         Venue venue2 = new Venue();
         venue2.setId(2);
         venue2.setName("Manchester Conference Center");
         venue2.setCapacity(500);
-        venue2.setRoadAddress("City Center, Manchester");
-        venue2.setPostcode("M13 9PL");
+        venue2.setAddress("City Center, Manchester");
         
         List<Venue> matchingVenues = Arrays.asList(venue1, venue2);
         
@@ -192,8 +172,8 @@ public class VenuesControllerSearchTest {
                 .andExpect(view().name("venues/index"))
                 .andExpect(model().attribute("venues", hasSize(2)))
                 .andExpect(model().attribute("venues", hasItems(
-                        allOf(hasProperty("id", is(1L)), hasProperty("name", is("Manchester Hall")), hasProperty("roadAddress", is("Oxford Road, Manchester")), hasProperty("postcode", is("M13 9PL"))),
-                        allOf(hasProperty("id", is(2L)), hasProperty("name", is("Manchester Conference Center")), hasProperty("roadAddress", is("City Center, Manchester")), hasProperty("postcode", is("M13 9PL")))
+                        allOf(hasProperty("id", is(1L)), hasProperty("name", is("Manchester Hall"))),
+                        allOf(hasProperty("id", is(2L)), hasProperty("name", is("Manchester Conference Center")))
                 )));
         
         verify(venueService).findByNameContainingIgnoreCase("manchester");

@@ -1,9 +1,6 @@
 package uk.ac.man.cs.eventlite.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "venues")
@@ -17,11 +14,8 @@ public class Venue {
 
     private int capacity;
 
-    @Column(name = "road_address", nullable = true)
-    private String roadAddress;
-
-    @Column(name = "postcode", nullable = true)
-    private String postcode;
+    @Column(name = "address", nullable = true)
+    private String address;
 
     public Venue() {
     }
@@ -50,19 +44,11 @@ public class Venue {
         this.capacity = capacity;
     }
 
-    public String getRoadAddress() {
-        return roadAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setRoadAddress(String roadAddress) {
-        this.roadAddress = roadAddress;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
