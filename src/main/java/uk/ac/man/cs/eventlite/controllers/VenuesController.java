@@ -89,22 +89,25 @@ public class VenuesController {
 
     @DeleteMapping("/{id}")
     public String deleteVenue(@PathVariable("id") long id, RedirectAttributes redirectAttrs) {
-        // Check if the venue exists
         if (!venueService.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found");
         }
 
-        // Check if there are any events associated with this venue
         if (eventService.existsByVenueId(id)) {
             redirectAttrs.addFlashAttribute("error_message", "Cannot delete venue with existing events.");
-            return "redirect:/venues"; // Redirect back to venues index
+            return "redirect:/venues";
         }
 
-        // Proceed to delete the venue
+        System.out.println("Deleting venue with ID: " + id); // Debug statement
+
         venueService.deleteById(id);
+
+        System.out.println("Venue deleted."); // Debug statement
+
         redirectAttrs.addFlashAttribute("ok_message", "Venue deleted.");
-        return "redirect:/venues"; // Redirect to the venues index page
+        return "redirect:/venues";
     }
+
 
     @PutMapping("/{id}")
     public String updateVenue(@PathVariable("id") long id, @ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
@@ -134,8 +137,12 @@ public class VenuesController {
 
     @PostMapping
     public String createVenue(@ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
-        venueService.save(venue); // Save the new venue
+        venueService.save(venue); 
+
+        System.out.println("New Venue Created: " + venue.getId()); // Debugging ID after saving
+
         redirectAttrs.addFlashAttribute("ok_message", "Venue created successfully.");
-        return "redirect:/venues"; // Redirect to the venues index page
+        return "redirect:/venues";
     }
+
 }

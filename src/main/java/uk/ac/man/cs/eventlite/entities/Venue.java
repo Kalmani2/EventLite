@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 @Table(name = "venues")
 public class Venue {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
 
     @Column(name = "name", nullable = false)
     private String name;
