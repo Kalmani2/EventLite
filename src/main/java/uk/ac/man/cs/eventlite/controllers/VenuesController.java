@@ -68,11 +68,15 @@ public class VenuesController {
         LocalTime now = LocalTime.now();
         List<Event> upcomingEvents = venueEvents.stream()
             .filter(event -> event.getDate().isAfter(today) || 
-                             (event.getDate().isEqual(today) && event.getTime().isAfter(now)))
+                             (event.getDate().isEqual(today) && 
+                             event.getTime() == null || event.getTime().isAfter(now)))
             .collect(Collectors.toList());
 
         upcomingEvents.sort((e1, e2) -> {
             if (e1.getDate().equals(e2.getDate())) {
+                if (e1.getTime() == null || e2.getTime() == null) {
+                    return 0;
+                }
                 return e1.getTime().compareTo(e2.getTime());
             }
             return e1.getDate().compareTo(e2.getDate());

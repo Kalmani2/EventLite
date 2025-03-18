@@ -19,7 +19,7 @@
       <ul th:unless="${upcomingEvents.isEmpty()}">
           <li th:each="event : ${upcomingEvents}">
               <a th:href="@{/events/{id}/details(id=${event.id})}" th:text="${event.name}"></a> - 
-              <span th:text="${event.date} + ' ' + ${event.time}"></span>
+              <span th:text="${event.date} + ' ' + (${event.time} ?: '')"></span>
           </li>
       </ul>
       <p>
