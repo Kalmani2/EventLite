@@ -39,6 +39,8 @@ public class VenuesControllerDetailsTest {
     @MockBean
     private EventService eventService;
     
+    
+    
     @Test
     public void testGetVenueDetailsWithUpcomingEvents() throws Exception {
         long venueId = 1L;
