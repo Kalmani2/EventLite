@@ -24,9 +24,76 @@
     <div>
       <h1>Welcome to EventLite</h1>
       <p>Discover and manage your events with ease.</p>
-      <a class="btn btn-primary" href="/events">View Events</a>
-      <a class="btn btn-secondary" href="/venues">View Venues</a>
+      <a class="btn btn-primary" href="/events">View All Events</a>
+      <a class="btn btn-secondary" href="/venues">View All Venues</a>
     </div>
+
+    <div class="container">
+      <div class="row">
+        <h3>Upcoming Events</h3>
+      </div>  
+      <div class="row"> 
+        <div class="col-md-2"></div>
+        <div class="col-md-8">	
+          <table class="table table-hover table-bordered">
+              <thead class="table-dark">
+                  <tr>
+                <th>#</th>
+                      <th><i class="fa-solid fa-bolt"></i> Event</th>
+                      <th><i class="fa-solid fa-map-marker-alt"></i> Venue</th>
+                      <th><i class="fa-solid fa-calendar"></i> Date</th>
+                      <th><i class="fa-solid fa-clock"></i> Time</th>
+                  </tr>
+              </thead>
+              <tbody th:if="${events != null}">
+                <tr th:each="e, stat : ${events}" th:if="${stat.index < 3}")>	
+                  <td th:text="${stat.index + 1}">1</td>
+                  <td><a th:href="@{/events/{id}/details(id=${e.id})}" class="text-decoration-none" th:text="${e.name}">Event Name</a></td>
+                  <td th:text="${e.venue.name}">Venue</td>
+                  <td th:text="${e.date}">Event Date</td>
+                  <td th:text="${e.time}">Event Time</td>
+                </tr>
+              </tbody>
+          </table>
+          <div th:if="${events == null}" class="alert alert-info mt-3">No events found.</div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="border-top border-5 border-dark my-1"></div>
+		</row>
+		<div class="row my-3">
+			<h3>Upcoming Events</h3>
+		</div>
+		<div class="row"> 
+		        <div class="col-md-2"></div>
+		        <div class="col-md-8">	
+		          <table class="table table-hover table-bordered">
+		              <thead class="table-dark">
+		                  <tr>
+		                	<th>#</th>
+		                      <th><i class="fa-solid fa-bolt"></i> Venue</th>
+		                      <th><i class="fa-solid fa-map-marker-alt"></i> Capacity</th>
+		                      <th><i class="fa-solid fa-calendar"></i> Event Number</th>
+		                  </tr>
+		              </thead>
+		              <tbody th:if="${venues != null}">
+		                <tr th:each="v, stat : ${venues}" th:if="${stat.index < 3}")>	
+		                  <td th:text="${stat.index + 1}">1</td>
+		                  <td><a th:href="@{/venues/{id}/details(id=${v.key.id})}" class="text-decoration-none" th:text="${v.key.name}">Venue Name</a></td>
+		                  <td th:text="${v.key.capacity}">Event Capacity</td>
+		                  <td th:text="${v.value}">Event Number</td>
+		                </tr>
+		              </tbody>
+		          </table>
+		          <div th:if="${venues == null}" class="alert alert-info mt-3">No venues found.</div>
+		        </div>
+		        <div class="col-md-2"></div>
+		      </div>
+	</div>
 
   </div>
   <script type="text/javascript" src="/webjars/popper.js/umd/popper.min.js"></script>
