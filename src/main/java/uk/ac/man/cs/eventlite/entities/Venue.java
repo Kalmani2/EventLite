@@ -20,6 +20,12 @@ public class Venue {
     @Column(name = "address", nullable = true)
     private String address;
 
+    @Column(name = "latitude", nullable = true)
+    private Double latitude;
+    
+    @Column(name = "longitude", nullable = true)
+    private Double longitude;
+
     public Venue() {
     }
 
@@ -53,5 +59,21 @@ public class Venue {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

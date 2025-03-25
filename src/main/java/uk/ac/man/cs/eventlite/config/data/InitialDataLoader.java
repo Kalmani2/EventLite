@@ -38,6 +38,9 @@ public class InitialDataLoader {
                 String[] venueNames = { "Old Trafford", "Venue A", "Venue B" };
                 int[] venueCapacities = { 75000, 100, 100 };
                 String[] venueAddressess = {"Stretford, Manchester M16 0RA", "123 Happy Street", "321 Sad Avenue"};
+                float[] latitudes = { 53.4631f, 53.4808f, 53.4722f };
+                float[] longitudes = { -2.2913f, -2.2426f, -2.2404f };
+
 
                 for (int i = 0; i < venueNames.length; i++) {
                     Venue venue = new Venue();
@@ -46,6 +49,8 @@ public class InitialDataLoader {
                     venue.setName(venueNames[i]);
                     venue.setAddress(venueAddressess[i]);                    
                     venue.setCapacity(venueCapacities[i]);
+                    venue.setLatitude(latitudes[i]);
+                    venue.setLongitude(longitudes[i]);
                     venueService.save(venue);
                 }
             }
