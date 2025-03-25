@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -47,7 +49,7 @@ public class VenuesController {
         model.addAttribute("venues", venueService.findByNameContainingIgnoreCase(query));
         return "venues/index";
     }
-    
+
     @GetMapping("/{id}/details")
     public String getVenueDetails(@PathVariable("id") long id, Model model) {
         Venue venue = venueService.findById(id);
@@ -67,10 +69,10 @@ public class VenuesController {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
         List<Event> upcomingEvents = venueEvents.stream()
-            .filter(event -> event.getDate().isAfter(today) || 
-                             (event.getDate().isEqual(today) && 
-                             (event.getTime() == null || event.getTime().isAfter(now))))
-            .collect(Collectors.toList());
+                .filter(event -> event.getDate().isAfter(today) ||
+                        (event.getDate().isEqual(today) &&
+                                (event.getTime() == null || event.getTime().isAfter(now))))
+                .collect(Collectors.toList());
 
         upcomingEvents.sort((e1, e2) -> {
             if (e1.getDate().equals(e2.getDate())) {
@@ -108,9 +110,9 @@ public class VenuesController {
         return "redirect:/venues";
     }
 
-
     @PutMapping("/{id}")
-    public String updateVenue(@PathVariable("id") long id, @ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
+    public String updateVenue(@PathVariable("id") long id, @ModelAttribute Venue venue,
+            RedirectAttributes redirectAttrs) {
         // Retrieve the existing venue
         Venue existingVenue = venueService.findById(id);
         if (existingVenue == null) {
@@ -136,11 +138,13 @@ public class VenuesController {
     }
 
     @PostMapping
-    public String createVenue(@ModelAttribute Venue venue, RedirectAttributes redirectAttrs) {
-        venueService.save(venue); 
-
-        System.out.println("New Venue Created: " + venue.getId()); // Debugging ID after saving
-
+    public String createVenue(@Valid @ModelAttribute Venue venue, BindingResult bindingResult,
+            RedirectAttributes redirectAttrs) {
+        if (bindingResult.hasErrors()) {
+            return "venues/new_venue";
+        }
+        venueService.save(venue);
+        System.out.println("New Venue Created: " + venue.getId());
         redirectAttrs.addFlashAttribute("ok_message", "Venue created successfully.");
         return "redirect:/venues";
     }
