@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -7,6 +8,8 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.not;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.Mockito.verify;
@@ -67,7 +70,8 @@ public class EventsControllerApiTest {
 		mvc.perform(get("/api/events").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(handler().methodName("getAllEvents")).andExpect(jsonPath("$.length()", equalTo(2)))
 				.andExpect(jsonPath("$._links.self.href", endsWith("/api/events")))
-				.andExpect(jsonPath("$._embedded.events.length()", equalTo(1)));
+				.andExpect(jsonPath("$._embedded.events.length()", equalTo(1)))
+				.andExpect(jsonPath("$._embedded.events[0]._links.venue.href", not(empty())));
 
 		verify(eventService).findAll();
 	}
