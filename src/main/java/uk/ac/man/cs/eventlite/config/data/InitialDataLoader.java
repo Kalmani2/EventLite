@@ -35,11 +35,11 @@ public class InitialDataLoader {
             if (venueService.count() > 0) {
                 log.info("Database already populated with venues. Skipping venue initialization.");
             } else {
-                String[] venueNames = { "Old Trafford", "Venue A", "Venue B" };
+                String[] venueNames = { "Old Trafford", "Kilburn Building", "Crawford House" };
                 int[] venueCapacities = { 75000, 100, 100 };
-                String[] venueAddressess = {"Stretford, Manchester M16 0RA", "123 Happy Street", "321 Sad Avenue"};
-                float[] latitudes = { 53.4631f, 53.4808f, 53.4722f };
-                float[] longitudes = { -2.2913f, -2.2426f, -2.2404f };
+                String[] venueAddressess = {"Stretford, Manchester M16 0RA", "Oxford Rd, Manchester M13 9PL", "Booth St E, Manchester M13 9SS"};
+                float[] latitudes = { 53.4631f, 53.4675f, 53.4685f };
+                float[] longitudes = { -2.2913f, -2.2340f, -2.2348f };
 
 
                 for (int i = 0; i < venueNames.length; i++) {
@@ -71,14 +71,14 @@ public class InitialDataLoader {
                 // }
 
                 Venue oldTrafford = venueService.findById(1);
-                Venue venueA = venueService.findById(2);
-                Venue venueB = venueService.findById(3);
+                Venue kilburn = venueService.findById(2);
+                Venue crawford = venueService.findById(3);
 
                 String[] eventNames = { "Concert1", "Event Alpha", "Beta", "Apple", "Former", "Previous", "Past" };
                 String[] eventDate = { "2025-01-01", "2025-07-11", "2025-07-11", "2025-07-12", "2025-01-11",
                         "2025-01-11", "2025-01-10" };
                 String[] eventTime = { "08:00", "12:30", "10:00", null, "11:00", "18:30", "17:00" };
-                Venue[] eventVenue = { oldTrafford, venueB, venueA, venueA, venueB, venueA, venueA };
+                Venue[] eventVenue = { oldTrafford, crawford, kilburn, kilburn, crawford, kilburn, kilburn };
 
                 for (int i = 0; i < eventNames.length; i++) {
                     Event event = new Event();
