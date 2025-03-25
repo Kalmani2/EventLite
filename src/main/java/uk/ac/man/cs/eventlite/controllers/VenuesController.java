@@ -69,7 +69,7 @@ public class VenuesController {
         List<Event> upcomingEvents = venueEvents.stream()
             .filter(event -> event.getDate().isAfter(today) || 
                              (event.getDate().isEqual(today) && 
-                             event.getTime() == null || event.getTime().isAfter(now)))
+                             (event.getTime() == null || event.getTime().isAfter(now))))
             .collect(Collectors.toList());
 
         upcomingEvents.sort((e1, e2) -> {
