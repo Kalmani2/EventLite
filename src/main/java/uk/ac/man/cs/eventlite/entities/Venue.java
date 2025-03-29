@@ -1,23 +1,27 @@
 package uk.ac.man.cs.eventlite.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import uk.ac.man.cs.eventlite.validator.ValidAddress;
 
 @Entity
 @Table(name = "venues")
 public class Venue {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
     @Column(name = "name", nullable = false)
+    @Size(max = 256)
     private String name;
 
     private int capacity;
 
-    @Column(name = "address", nullable = true)
+    // Expects <road address, postcode> as input
+    @Column(name = "address", nullable = false)
+    @Size(max = 300, message = "Road address must be less than 300 characters")
+    @ValidAddress
     private String address;
 
     @Column(name = "latitude", nullable = true)

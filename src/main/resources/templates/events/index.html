@@ -46,7 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="e : ${events}" th:if="${e.date != null and e.date.isAfter(T(java.time.LocalDate).now())}" th>
+					<tr th:each="e : ${events}" th:if="${(e.date.isAfter(T(java.time.LocalDate).now()) or (e.date.isEqual(T(java.time.LocalDate).now()) and e.time != null and e.time.isAfter(T(java.time.LocalTime).now())))}" th>
                         <td><a th:href="@{/events/{id}/details(id=${e.id})}" class="text-decoration-none" th:text="${e.name}">Event Name</a></td>
                         <td><a th:href="@{/venues/{id}/details(id=${e.venue.id})}" class="text-decoration-none" th:text="${e.venue.name}">Venue</a></td>
                         <td th:text="${e.date}">Event Date</td>
@@ -55,7 +55,7 @@
                 </tbody>
             </table>
         </div>
-        <div th:if="${events.?[date != null and date.isAfter(T(java.time.LocalDate).now())].empty}">
+		<div th:if="${events.?[date != null and (date.isAfter(T(java.time.LocalDate).now()) or (date.isEqual(T(java.time.LocalDate).now()) and time != null and time.isAfter(T(java.time.LocalTime).now())))].empty}">
             <p class="text-muted text-center">There are no upcoming events.</p>
         </div>
 
