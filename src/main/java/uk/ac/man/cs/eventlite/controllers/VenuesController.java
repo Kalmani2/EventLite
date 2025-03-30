@@ -1,5 +1,6 @@
 package uk.ac.man.cs.eventlite.controllers;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -22,7 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.geojson.Point;
+
 import jakarta.validation.Valid;
+import retrofit2.Response;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Venue;
@@ -32,11 +39,54 @@ import uk.ac.man.cs.eventlite.entities.Event;
 @RequestMapping("/venues")
 public class VenuesController {
 
+    // Mapbox access token
+    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiZXZlbnRsaXRlIiwiYSI6ImNsbmA5emdyMzB5eTIycm80MHViaTgxd2UifQ.IZuKdp5HZ-Nx9hIEYaXwuA";
+
     @Autowired
     private VenueService venueService;
 
     @Autowired
     private EventService eventService;
+    
+    /**
+     * Geocode an address to get latitude and longitude
+     * 
+     * @param address The address to geocode (should include postcode)
+     * @return double array where [0] is longitude and [1] is latitude
+     */
+    private double[] geocodeAddress(String address) {
+        try {
+            MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+                .accessToken(MAPBOX_ACCESS_TOKEN)
+                .query(address)
+                .build();
+            
+            Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+            
+            if (response.body() != null && response.body().features().size() > 0) {
+                CarmenFeature feature = response.body().features().get(0);
+                Point point = feature.center();
+                
+                // Sleep for a second after the geocoding request as recommended
+                Thread.sleep(1000L);
+                
+                if (point != null) {
+                    return new double[] { point.longitude(), point.latitude() };
+                }
+            }
+            
+            // Sleep for a second if the geocoding fails
+            Thread.sleep(1000L);
+            
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Error geocoding address: " + e.getMessage());
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        
+        return null;
+    }
 
     @GetMapping
     public String getAllVenues(Model model) {
@@ -123,7 +173,15 @@ public class VenuesController {
         existingVenue.setName(venue.getName());
         existingVenue.setAddress(venue.getAddress());
         existingVenue.setCapacity(venue.getCapacity());
-        // Add any other properties you need to update
+        
+        // Get and set coordinates if the address was changed
+        if (!existingVenue.getAddress().equals(venue.getAddress())) {
+            double[] coordinates = geocodeAddress(venue.getAddress());
+            if (coordinates != null) {
+                existingVenue.setLongitude(coordinates[0]);
+                existingVenue.setLatitude(coordinates[1]);
+            }
+        }
 
         // Save the updated venue
         venueService.save(existingVenue);
@@ -143,8 +201,17 @@ public class VenuesController {
         if (bindingResult.hasErrors()) {
             return "venues/new_venue";
         }
+        
+        // Get coordinates from the address
+        double[] coordinates = geocodeAddress(venue.getAddress());
+        if (coordinates != null) {
+            venue.setLongitude(coordinates[0]);
+            venue.setLatitude(coordinates[1]);
+        }
+        
         venueService.save(venue);
-        System.out.println("New Venue Created: " + venue.getId());
+        System.out.println("New Venue Created: " + venue.getId() + 
+                           " with coordinates: " + venue.getLatitude() + ", " + venue.getLongitude());
         redirectAttrs.addFlashAttribute("ok_message", "Venue created successfully.");
         return "redirect:/venues";
     }
