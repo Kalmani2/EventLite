@@ -38,8 +38,8 @@ public class InitialDataLoader {
                 String[] venueNames = { "Old Trafford", "Kilburn Building", "Crawford House" };
                 int[] venueCapacities = { 75000, 100, 100 };
                 String[] venueAddressess = {"Stretford, Manchester M16 0RA", "Oxford Rd, Manchester M13 9PL", "Booth St E, Manchester M13 9SS"};
-                float[] latitudes = { 53.4631f, 53.4675f, 53.4685f };
-                float[] longitudes = { -2.2913f, -2.2340f, -2.2348f };
+                Double[] latitudes = { 53.4631, 53.4675, 53.4685 };
+                Double[] longitudes = { -2.2913, -2.2340, -2.2348 };
 
 
                 for (int i = 0; i < venueNames.length; i++) {

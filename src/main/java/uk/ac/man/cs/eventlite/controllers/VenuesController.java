@@ -40,7 +40,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 public class VenuesController {
 
     // mapbox access token
-    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHczYnk5cDB6d28yanM4YmU2YXp6aXUifQ.kFX-eBp8VEWG-K6j1sbj6A";
+    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHg5NG92dTAwd2wyaXM0YTRydWh4dzAifQ.cILrNVVAjfJub-a66Y4rOA";
 
     @Autowired
     private VenueService venueService;

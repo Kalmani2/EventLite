@@ -32,7 +32,16 @@
         <span th:text="${venue.address}" class="text-muted">Venue Address</span>
       </p>
 
-	  
+      <p>
+        <strong><i class="fa-solid fa-location-arrow"></i> Latitude:</strong> 
+        <span th:text="${venue.latitude}" class="text-muted">Venue Latitude</span>
+      </p>
+
+      <p>
+        <strong><i class="fa-solid fa-location-arrow"></i> Longitude:</strong> 
+        <span th:text="${venue.longitude}" class="text-muted">Venue Longitude</span>
+      </p>
+
       <div class="d-flex justify-content-between mt-4">
         <a href="/venues" class="btn btn-secondary">
           <i class="fa-solid fa-arrow-left"></i> Back to Venues
