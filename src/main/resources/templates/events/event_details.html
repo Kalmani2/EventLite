@@ -33,6 +33,13 @@
         </span>
       </p>
 
+      <!-- Display Latitude and Longitude -->
+      <div class="mt-3">
+        <h4 class="text-secondary">Coordinates:</h4>
+        <p><strong>Latitude:</strong> <span th:text="${venue.latitude != null ? venue.latitude : 'N/A'}">N/A</span></p>
+        <p><strong>Longitude:</strong> <span th:text="${venue.longitude != null ? venue.longitude : 'N/A'}">N/A</span></p>
+      </div>
+
       <div class="mt-3">
         <h4 class="text-secondary">Description:</h4>
         <p th:text="${event.description}" class="p-3 bg-light rounded">Event Description</p>

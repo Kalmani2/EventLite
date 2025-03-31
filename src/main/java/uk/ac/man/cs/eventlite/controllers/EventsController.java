@@ -171,12 +171,11 @@ public class EventsController {
 			throw new EventNotFoundException(id);
 		}
 
-		Venue venue = null;
-		for (Venue v : venueService.findAll()) {
-			if (v == event.getVenue()) {
-				venue = v;
-				break;
-			}
+		Venue venue = event.getVenue();
+		
+		// Make sure venue is fully loaded with coordinates
+		if (venue != null) {
+			venue = venueService.findById(venue.getId());
 		}
 
 		model.addAttribute("event", event);

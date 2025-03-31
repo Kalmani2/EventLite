@@ -39,8 +39,8 @@ import uk.ac.man.cs.eventlite.entities.Event;
 @RequestMapping("/venues")
 public class VenuesController {
 
-    // Mapbox access token
-    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiZXZlbnRsaXRlIiwiYSI6ImNsbmA5emdyMzB5eTIycm80MHViaTgxd2UifQ.IZuKdp5HZ-Nx9hIEYaXwuA";
+    // mapbox access token
+    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHczYnk5cDB6d28yanM4YmU2YXp6aXUifQ.kFX-eBp8VEWG-K6j1sbj6A";
 
     @Autowired
     private VenueService venueService;
@@ -48,12 +48,6 @@ public class VenuesController {
     @Autowired
     private EventService eventService;
     
-    /**
-     * Geocode an address to get latitude and longitude
-     * 
-     * @param address The address to geocode (should include postcode)
-     * @return double array where [0] is longitude and [1] is latitude
-     */
     private double[] geocodeAddress(String address) {
         try {
             MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
@@ -62,31 +56,46 @@ public class VenuesController {
                 .build();
             
             Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
-            
-            if (response.body() != null && response.body().features().size() > 0) {
-                CarmenFeature feature = response.body().features().get(0);
-                Point point = feature.center();
-                
-                // Sleep for a second after the geocoding request as recommended
+
+            // added some debugging statements to see what went wrong (if it does)
+
+            if (!response.isSuccessful()) {
+                System.err.println("Geocoding API call failed with code: " + response.code());
+                return null;
+            }
+
+            GeocodingResponse geocodingResponse = response.body();
+
+            if (geocodingResponse == null || geocodingResponse.features().isEmpty()) {
+                System.err.println("No geocoding results for address: " + address);
+                return null;
+            }
+
+            CarmenFeature feature = geocodingResponse.features().get(0);
+            Point point = feature.center();
+
+            if (point != null) {
+
                 Thread.sleep(1000L);
                 
-                if (point != null) {
-                    return new double[] { point.longitude(), point.latitude() };
-                }
+                System.out.println("Geocoding result: " + point.latitude() + ", " + point.longitude());
+                return new double[] { point.longitude(), point.latitude() };
+            } else {
+                System.err.println("Geocoding feature returned no coordinates.");
             }
             
-            // Sleep for a second if the geocoding fails
             Thread.sleep(1000L);
-            
-        } catch (IOException | InterruptedException e) {
+
+        } catch (IOException e) {
             System.err.println("Error geocoding address: " + e.getMessage());
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
+        } catch (InterruptedException e) {
+            System.err.println("Interrupted while geocoding: " + e.getMessage());
+            Thread.currentThread().interrupt();
         }
-        
+
         return null;
     }
+
 
     @GetMapping
     public String getAllVenues(Model model) {
