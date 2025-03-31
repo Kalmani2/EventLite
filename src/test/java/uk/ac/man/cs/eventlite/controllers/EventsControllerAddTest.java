@@ -131,7 +131,7 @@ public class EventsControllerAddTest {
                 .param("time", "09:00")
                 .param("description", "Testing invalid venue")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isInternalServerError());
+        		.andExpect(status().is4xxClientError());
     }
 
     // Additional tests for missing or invalid data:
