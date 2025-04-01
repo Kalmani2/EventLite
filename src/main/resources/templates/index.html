@@ -66,7 +66,7 @@
 			<div class="border-top border-5 border-dark my-1"></div>
 		</row>
 		<div class="row my-3">
-			<h3>Upcoming Events</h3>
+			<h3>Popular Venues</h3>
 		</div>
 		<div class="row"> 
 		        <div class="col-md-2"></div>
@@ -77,7 +77,7 @@
 		                	<th>#</th>
 		                      <th><i class="fa-solid fa-building"></i> Venue</th>
 		                      <th><i class="fa-solid fa-users"></i> Capacity</th>
-		                      <th><i class="fa-solid fa-calendar"></i> Event Number</th>
+		                      <th><i class="fa-solid fa-calendar"></i> Number of Events</th>
 		                  </tr>
 		              </thead>
 		              <tbody th:if="${venues != null}">
@@ -85,7 +85,7 @@
 		                  <td th:text="${stat.index + 1}">1</td>
 		                  <td><a th:href="@{/venues/{id}/details(id=${v.key.id})}" class="text-decoration-none" th:text="${v.key.name}">Venue Name</a></td>
 		                  <td th:text="${v.key.capacity}">Event Capacity</td>
-		                  <td th:text="${v.value}">Event Number</td>
+		                  <td th:text="${v.value}">NUmber of Events</td>
 		                </tr>
 		              </tbody>
 		          </table>
