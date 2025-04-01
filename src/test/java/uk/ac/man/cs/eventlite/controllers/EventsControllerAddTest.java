@@ -1,6 +1,7 @@
 package uk.ac.man.cs.eventlite.controllers;
 
 import static org.hamcrest.Matchers.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -131,7 +132,7 @@ public class EventsControllerAddTest {
                 .param("time", "09:00")
                 .param("description", "Testing invalid venue")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isInternalServerError());
+        		.andExpect(status().is4xxClientError());
     }
 
     // Additional tests for missing or invalid data:
