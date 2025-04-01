@@ -82,7 +82,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testFindByIdExists() {
+    public void testFindByIdExists() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -107,7 +107,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
 
     @Test
-    public void testFindByIdNotExists() {
+    public void testFindByIdNotExists() throws Exception {
         Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -131,7 +131,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testSave() {
+    public void testSave() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -156,7 +156,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testAddEvent() {
+    public void testAddEvent() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -181,7 +181,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -211,21 +211,21 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testExistsByIdTrue() {
+    public void testExistsByIdTrue() throws Exception {
         when(eventRepository.existsById(1L)).thenReturn(true);
         assertTrue(eventService.existsById(1L));
         verify(eventRepository).existsById(1L);
     }
 
     @Test
-    public void testExistsByIdFalse() {
+    public void testExistsByIdFalse() throws Exception {
         when(eventRepository.existsById(1L)).thenReturn(false);
         assertFalse(eventService.existsById(1L));
         verify(eventRepository).existsById(1L);
     }
     
     @Test
-    public void testDelete() {
+    public void testDelete() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -253,7 +253,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testDeleteById() {
+    public void testDeleteById() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -282,7 +282,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testDeleteAll() {
+    public void testDeleteAll() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -299,10 +299,10 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         event.setVenue(venue);
         
         Event eventTwo = new Event();
-        event.setName(eventName);
-        event.setDate(LocalDate.parse(eventDate));
-        event.setTime(LocalTime.parse(eventTime));
-        event.setVenue(venue);
+        eventTwo.setName(eventName);
+        eventTwo.setDate(LocalDate.parse(eventDate));
+        eventTwo.setTime(LocalTime.parse(eventTime));
+        eventTwo.setVenue(venue);
         
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(eventRepository.findById(2L)).thenReturn(Optional.of(eventTwo));
@@ -318,7 +318,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testDeleteAllById() {
+    public void testDeleteAllById() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
         venue.setName("Test Venue");
@@ -335,10 +335,10 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         event.setVenue(venue);
         
         Event eventTwo = new Event();
-        event.setName(eventName);
-        event.setDate(LocalDate.parse(eventDate));
-        event.setTime(LocalTime.parse(eventTime));
-        event.setVenue(venue);
+        eventTwo.setName(eventName);
+        eventTwo.setDate(LocalDate.parse(eventDate));
+        eventTwo.setTime(LocalTime.parse(eventTime));
+        eventTwo.setVenue(venue);
         
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(eventRepository.findById(2L)).thenReturn(Optional.of(eventTwo));
@@ -354,14 +354,14 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
-    public void testExistsByVenueIdTrue() {
+    public void testExistsByVenueIdTrue() throws Exception {
         when(eventRepository.existsByVenueId(1L)).thenReturn(true);
         assertTrue(eventService.existsByVenueId(1L));
         verify(eventRepository).existsByVenueId(1L);
     }
 
     @Test
-    public void testExistsByVenueIdFalse() {
+    public void testExistsByVenueIdFalse() throws Exception {
         when(eventRepository.existsByVenueId(2L)).thenReturn(false);
         assertFalse(eventService.existsByVenueId(2L));
         verify(eventRepository).existsByVenueId(2L);
