@@ -54,22 +54,6 @@ public class VenuesController {
                 .accessToken(MAPBOX_ACCESS_TOKEN)
                 .query(address)
                 .build();
-            
-            Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
-
-            // added some debugging statements to see what went wrong (if it does)
-
-            if (!response.isSuccessful()) {
-                System.err.println("Geocoding API call failed with code: " + response.code());
-                return null;
-            }
-
-            GeocodingResponse geocodingResponse = response.body();
-
-            if (geocodingResponse == null || geocodingResponse.features().isEmpty()) {
-                System.err.println("No geocoding results for address: " + address);
-                return null;
-            }
 
             CarmenFeature feature = geocodingResponse.features().get(0);
             Point point = feature.center();
