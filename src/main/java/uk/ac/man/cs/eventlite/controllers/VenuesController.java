@@ -40,7 +40,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 public class VenuesController {
 
     // mapbox access token
-    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHg5NG92dTAwd2wyaXM0YTRydWh4dzAifQ.cILrNVVAjfJub-a66Y4rOA";
+    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHlnMHk0eDAwdHgyanIwY2c3dDV0bTEifQ.4QM0YZeknSfKTVhsmJ3pCg";
 
     @Autowired
     private VenueService venueService;
@@ -54,6 +54,22 @@ public class VenuesController {
                 .accessToken(MAPBOX_ACCESS_TOKEN)
                 .query(address)
                 .build();
+            
+            Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+
+            // added some debugging statements to see what went wrong (if it does)
+
+            if (!response.isSuccessful()) {
+                System.err.println("Geocoding API call failed with code: " + response.code());
+                return null;
+            }
+
+            GeocodingResponse geocodingResponse = response.body();
+
+            if (geocodingResponse == null || geocodingResponse.features().isEmpty()) {
+                System.err.println("No geocoding results for address: " + address);
+                return null;
+            }
 
             CarmenFeature feature = geocodingResponse.features().get(0);
             Point point = feature.center();

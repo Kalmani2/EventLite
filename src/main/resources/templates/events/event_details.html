@@ -13,6 +13,59 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
   <script> console.log("this works??"); </script>
 
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get venue information from Thymeleaf
+      const venueName = /*[[${event.venue.name}]]*/ 'Venue Name';
+      const eventName = /*[[${event.name}]]*/ 'Event Name';
+      const longitude = /*[[${event.venue.longitude}]]*/ null;
+      const latitude = /*[[${event.venue.latitude}]]*/ null;
+      const eventTime = /*[[${event.time}]]*/ 'Event Time';
+      
+      // Initialize map if coordinates are available
+      if (longitude && latitude) {
+        console.log('Initializing map with coordinates:', longitude, latitude);
+        // Initialize Mapbox
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHlnMHk0eDAwdHgyanIwY2c3dDV0bTEifQ.4QM0YZeknSfKTVhsmJ3pCg';
+        
+        try {
+          const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [longitude, latitude],
+            zoom: 15  // Street level zoom
+          });
+          
+          console.log('Map initialized successfully');
+          
+          // Add a marker at the venue location
+          const popup = new mapboxgl.Popup({ offset: 25 })
+            .setHTML(`<h5>${eventName}</h5><p>Starts at ${eventTime}</p>`);
+            
+          new mapboxgl.Marker({ color: '#E02040' })
+            .setLngLat([longitude, latitude])
+            .setPopup(popup)
+            .addTo(map);
+          
+          console.log('Marker added successfully');
+          
+          // Add navigation controls
+          map.addControl(new mapboxgl.NavigationControl());
+          console.log('Navigation controls added');
+        } catch (error) {
+          console.error('Error initializing map:', error);
+          document.getElementById('map').innerHTML = 
+            `<div class="alert alert-danger text-center p-5">Error initializing map: ${error.message}</div>`;
+        }
+      } else {
+        console.log('Coordinates not available:', { longitude, latitude });
+        // Display a message if coordinates are not available
+        document.getElementById('map').innerHTML = 
+          '<div class="alert alert-warning text-center p-5">Location coordinates not available for this venue.</div>';
+      }
+    });
+  </script>
+
   <style>
     #map {
       width: 100%;
@@ -59,7 +112,7 @@
       </div>
 
       <div class="mt-4">
-        <h4 class="text-secondary mb-3">Map Preview (Hardcoded fixing) </h4>
+        <h4 class="text-secondary mb-3">Location</h4>
         <div id="map"></div>
       </div>
 
@@ -133,24 +186,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script th:inline="javascript">
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHg5NG92dTAwd2wyaXM0YTRydWh4dzAifQ.cILrNVVAjfJub-a66Y4rOA';
-      const map = new mapboxgl.Map({
-          container: 'map', // container ID
-          style: 'mapbox://styles/mapbox/streets-v12',
-          center: [-74.5, 40], // starting position [lng, lat]. Note that lat must be set between -90 and 90
-          zoom: 9 // starting zoom
-      });
-
-    console.log("This works");
-
-    map.on('load', () => {
-      console.log("Map loaded successfully");
-    });
-
-    console.log(document.getElementById('map'));
-
-  </script>
 
 </body>
 </html>
