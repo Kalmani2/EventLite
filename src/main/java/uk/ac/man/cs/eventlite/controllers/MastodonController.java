@@ -1,4 +1,4 @@
-package com.sys1yagi.mastodon4j.sample;
+package uk.ac.man.cs.eventlite.controllers;
 
 import com.google.gson.Gson;
 import com.sys1yagi.mastodon4j.MastodonClient;
@@ -13,10 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class StreamPublicTimeline {
+public class MastodonController {
     public static void main(String[] args) {
         // require authentication even if public streaming
         String accessToken = "ZiVgrWT06shZUPoOWkZD70cf7jRU7AAkqmUGrixVGN4";
+
         MastodonClient client = new MastodonClient.Builder("mstdn.jp", new OkHttpClient.Builder(), new Gson())
                 .accessToken(accessToken)
                 .useStreamingApi()
