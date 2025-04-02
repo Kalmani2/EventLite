@@ -2,6 +2,7 @@ package uk.ac.man.cs.eventlite.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,32 +48,18 @@ public class EventsController {
 
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable("id") long id, Model model) {
-		Event event = null;
-		for (Event e : eventService.findAll()) {
-			if (e.getId() == id) {
-				event = e;
-				break;
-			}
-		}
-		if (event == null) {
-			throw new EventNotFoundException(id);
-		}
+		Event event = eventService.findById(id)
+	            .orElseThrow(() -> new EventNotFoundException(id)); // Throws if not found
 
-		Venue linkedVenue = event.getVenue();
+	    Venue linkedVenue = event.getVenue(); // Now safe to call .getVenue()
 
-		// Venue linkedVenue = null;
-		// for (Venue v : venueService.findAll()) {
-		// if (v.getId() == event.getVenue().getId()) {
-		// linkedVenue = v;
-		// break;
-		// }
-		// }
+	    model.addAttribute("event", event);
+	    model.addAttribute("venue", linkedVenue);
 
-		model.addAttribute("event", event);
-		model.addAttribute("venue", linkedVenue);
-
-		return "events/event";
+	    return "events/event_details";
 	}
+	
+	
 
 	@GetMapping
 	public String getAllEvents(Model model) {
@@ -160,16 +147,8 @@ public class EventsController {
 
 	@GetMapping("/{id}/details")
 	public String getEventDetails(@PathVariable("id") long id, Model model) {
-		Event event = null;
-		for (Event e : eventService.findAll()) {
-			if (e.getId() == id) {
-				event = e;
-				break;
-			}
-		}
-		if (event == null) {
-			throw new EventNotFoundException(id);
-		}
+		Event event = eventService.findById(id)
+	            .orElseThrow(() -> new EventNotFoundException(id)); 
 
 		Venue venue = event.getVenue();
 		
