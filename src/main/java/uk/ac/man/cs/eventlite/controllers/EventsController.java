@@ -57,7 +57,7 @@ public class EventsController {
 	    model.addAttribute("venue", linkedVenue);
 
 	    return "events/event_details";
-	}
+	} 
 	
 	
 
