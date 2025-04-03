@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,6 +45,12 @@ public class EventsControllerAddTest {
 
     @MockBean
     private VenueService venueService;
+    
+    @MockBean 
+    private MastodonController mastodonController;
+    
+    private final String USERNAME = "Markel";
+	private final String PASSWORD = "Vigo";
 
     @Test
     public void testAddEventSuccess() throws Exception {
@@ -74,6 +81,7 @@ public class EventsControllerAddTest {
         when(eventService.findById(any(Long.class))).thenReturn(Optional.of(event));
 
         mvc.perform(post("/events")
+        		.with(csrf()) 
                 .param("venueId", "1")
                 .param("name", eventName)
                 .param("date", eventDate)

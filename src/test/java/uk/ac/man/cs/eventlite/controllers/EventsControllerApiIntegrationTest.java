@@ -44,16 +44,16 @@ public class EventsControllerApiIntegrationTest {
 	private final String USERNAME = "Markel";
 	private final String PASSWORD = "Vigo";
 
-	@BeforeEach
-	public void setup(WebTestClient webTestClient) {
-		client = webTestClient;
-	}
+//	@BeforeEach
+//	public void setup(WebTestClient webTestClient) {
+//		client = webTestClient;
+//	}
 
 	// ---------- GET Endpoints ----------
 
 	@Test
 	public void testGetAllEvents() {
-		client.get().uri("/events")
+		client.get().uri("/api/events")
 				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
 				.expectStatus().isOk()
@@ -64,7 +64,7 @@ public class EventsControllerApiIntegrationTest {
 
 	@Test
 	public void testGetEventNotFound() {
-		client.get().uri("/events/99")
+		client.get().uri("/api/events/99")
 				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
 				.expectStatus().isNotFound()
@@ -94,7 +94,7 @@ public class EventsControllerApiIntegrationTest {
 		event.setVenue(venue);
 		when(eventService.addEvent(any(Event.class))).thenReturn(event);
 
-		client.post().uri("/events")
+		client.post().uri("/api/events")
 				.headers(headers -> headers.setBasicAuth(USERNAME, PASSWORD))
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue("{\"venueId\":1, \"name\":\"New Event\", \"date\":\"" + event.getDate().toString()
@@ -109,7 +109,7 @@ public class EventsControllerApiIntegrationTest {
 	@Test
 	public void testCreateEventMissingData() {
 		// Missing the "name" field
-		client.post().uri("/events")
+		client.post().uri("/api/events")
 				.headers(headers -> headers.setBasicAuth(USERNAME, PASSWORD))
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(
@@ -123,7 +123,7 @@ public class EventsControllerApiIntegrationTest {
 	@Test
 	public void testCreateEventInvalidData() {
 		// A past date should be invalid.
-		client.post().uri("/events")
+		client.post().uri("/api/events")
 				.headers(headers -> headers.setBasicAuth(USERNAME, PASSWORD))
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(
@@ -138,7 +138,7 @@ public class EventsControllerApiIntegrationTest {
 	public void testCreateEventUnauthorised() {
 		// If the endpoint requires authentication and our test profile enforces it,
 		// then a POST without credentials should return 401 Unauthorized.
-		client.post().uri("/events")
+		client.post().uri("/api/events")
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(
 						"{\"venueId\":1, \"name\":\"Unauthorised Event\", \"date\":\"2025-12-31\", \"time\":\"12:00:00\", \"description\":\"Should not be allowed\"}")
