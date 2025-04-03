@@ -71,12 +71,7 @@ public class MastodonController {
             Timelines timelines = new Timelines(client);
             
             // (Option A) Simple direct call:
-            // List<Status> statuses = timelines.getHome().execute().getPart();
-
-            // (Option B) Using a Range + Pageable, as in your working snippet:
-            Range range = new Range(); 
-            Pageable<Status> pageable = timelines.getHome(range).execute();
-            List<Status> statuses = pageable.getPart();
+             List<Status> statuses = timelines.getHome().execute().getPart();
 
             // Sort newest-first by creation date
             statuses.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
