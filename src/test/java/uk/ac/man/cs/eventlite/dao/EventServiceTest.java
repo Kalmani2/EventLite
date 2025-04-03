@@ -186,19 +186,24 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         venue.setId(1);
         venue.setName("Test Venue");
         venue.setCapacity(100);
+        
+        Venue updatedVenue = new Venue();
+        updatedVenue.setId(2);
+        updatedVenue.setName("Test Venue Updated");
+        updatedVenue.setCapacity(100);
 
-        String eventName = "Test Event";
-        String eventDate = "2025-12-25";
-        String eventTime = "10:30";
 
         Event event = new Event();
-        event.setName(eventName);
-        event.setDate(LocalDate.parse(eventDate));
-        event.setTime(LocalTime.parse(eventTime));
+        event.setName("Test Event");
+        event.setDate(LocalDate.parse("2025-12-25"));
+        event.setTime(LocalTime.parse("10:30"));
         event.setVenue(venue);
         
         Event updatedEvent = new Event();
         updatedEvent.setName("Updated Event");
+        updatedEvent.setDate(LocalDate.parse("2025-12-27"));
+        updatedEvent.setTime(LocalTime.parse("11:30"));
+        updatedEvent.setVenue(updatedVenue);
         
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(eventRepository.save(any(Event.class))).thenReturn(updatedEvent);
@@ -206,6 +211,9 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         Event result = eventService.update(updatedEvent, 1L);
         assertNotNull(result);
         assertEquals("Updated Event", result.getName());
+        assertEquals(LocalDate.parse("2025-12-27"), result.getDate());
+        assertEquals(LocalTime.parse("11:30"), result.getTime());
+        assertEquals(updatedVenue, result.getVenue());
         verify(eventRepository).findById(1L);
         verify(eventRepository).save(any(Event.class));
     }
