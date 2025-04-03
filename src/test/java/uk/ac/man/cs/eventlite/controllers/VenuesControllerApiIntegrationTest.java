@@ -44,21 +44,21 @@ public class VenuesControllerApiIntegrationTest extends AbstractTransactionalJUn
 
     @Test
     public void getVenueNotFound() {
-        client.get().uri("/venues/99").accept(MediaType.APPLICATION_JSON).exchange()
+        client.get().uri("/venues/99999").accept(MediaType.APPLICATION_JSON).exchange()
             .expectStatus().isNotFound()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-            .jsonPath("$.error").value(containsString("venue 99"))
-            .jsonPath("$.id").isEqualTo(99);
+            .jsonPath("$.error").value(containsString("venue 99999"))
+            .jsonPath("$.id").isEqualTo(99999);
     }
     
     @Test
     public void testGetEventsForNonExistentVenue() {
-        client.get().uri("/venues/99/events").accept(MediaType.APPLICATION_JSON).exchange()
+        client.get().uri("/venues/99999/events").accept(MediaType.APPLICATION_JSON).exchange()
             .expectStatus().isNotFound()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-            .jsonPath("$.error").value(containsString("venue 99"))
-            .jsonPath("$.id").isEqualTo(99);
+            .jsonPath("$.error").value(containsString("venue 99999"))
+            .jsonPath("$.id").isEqualTo(99999);
     }
 }
