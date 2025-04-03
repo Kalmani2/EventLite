@@ -51,6 +51,7 @@ import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
 import uk.ac.man.cs.eventlite.entities.Event;
 import uk.ac.man.cs.eventlite.entities.Venue;
+import uk.ac.man.cs.eventlite.controllers.MastodonController;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(EventsController.class)
@@ -66,6 +67,9 @@ public class EventsControllerTest {
 
 	@MockBean
 	private VenueService venueService;
+	
+	@MockBean
+	private MastodonController mastodonController;
 
 	@Test
 	public void getEventValid() throws Exception {
@@ -116,6 +120,7 @@ public class EventsControllerTest {
 		
 		when(eventService.findAll()).thenReturn(events);
 		when(venueService.findAll()).thenReturn(venues);
+		when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
 		
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML))
         .andExpect(status().isOk()) 
@@ -127,12 +132,14 @@ public class EventsControllerTest {
 
 		verify(eventService).findAll();
 		verify(venueService).findAll();
+		verify(mastodonController).getTimelinePosts();
 	}
 	
 	@Test
 	public void getAllEventsInvalid() throws Exception {
 		when(eventService.findAll()).thenReturn(Collections.<Event>emptyList());
 		when(venueService.findAll()).thenReturn(Collections.<Venue>emptyList());
+		when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
 		
 		mvc.perform(get("/events").accept(MediaType.TEXT_HTML))
         .andExpect(status().isOk())
@@ -141,6 +148,7 @@ public class EventsControllerTest {
 
 		verify(eventService).findAll();
 		verify(venueService).findAll();
+		verify(mastodonController).getTimelinePosts();
 	}
 	
 	@Test
@@ -309,6 +317,7 @@ public class EventsControllerTest {
         
         when(eventService.findAll()).thenReturn(allEvents);
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+        when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
         
         mvc.perform(get("/events/search").param("query", "spring")
                 .accept(MediaType.TEXT_HTML))
@@ -352,6 +361,7 @@ public class EventsControllerTest {
         
         when(eventService.findAll()).thenReturn(allEvents);
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+        when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
         
         mvc.perform(get("/events/search").param("query", "nonexistent")
                 .accept(MediaType.TEXT_HTML))
@@ -389,6 +399,7 @@ public class EventsControllerTest {
         
         when(eventService.findAll()).thenReturn(allEvents);
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+        when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
         
         mvc.perform(get("/events/search").param("query", "SPRING")
                 .accept(MediaType.TEXT_HTML))
@@ -432,6 +443,7 @@ public class EventsControllerTest {
         
         when(eventService.findAll()).thenReturn(allEvents);
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+        when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
         
         mvc.perform(get("/events/search").param("query", "spr")
                 .accept(MediaType.TEXT_HTML))
@@ -464,6 +476,7 @@ public class EventsControllerTest {
         when(eventService.findById(1L)).thenReturn(Optional.of(event));
         when(venueService.findById(1L)).thenReturn(venue);
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+        when(mastodonController.getTimelinePosts()).thenReturn(Collections.emptyList());
         
         mvc.perform(get("/events/{id}/details", 1L)
            .with(csrf())

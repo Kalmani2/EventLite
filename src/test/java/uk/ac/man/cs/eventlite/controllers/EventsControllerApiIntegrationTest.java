@@ -10,6 +10,7 @@ import java.time.LocalTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,7 +30,8 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class EventsControllerApiIntegrationTest {
-
+	
+	@Autowired
 	private WebTestClient client;
 
 	@MockBean
