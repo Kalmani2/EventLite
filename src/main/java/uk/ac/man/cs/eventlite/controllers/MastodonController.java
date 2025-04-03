@@ -10,10 +10,27 @@ import com.sys1yagi.mastodon4j.api.exception.Mastodon4jRequestException;
 import com.sys1yagi.mastodon4j.api.method.Streaming;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Controller;
 
 import java.util.concurrent.TimeUnit;
 
+@Controller
 public class MastodonController {
+
+    private final MastodonClient client;
+
+    public MastodonController() {
+        // Create MastodonClient with hardcoded access token
+        this.client = new MastodonClient.Builder(
+            "mstdn.jp",
+            new OkHttpClient.Builder(),
+            new Gson()
+        )
+        .accessToken("ZiVgrWT06shZUPoOWkZD70cf7jRU7AAkqmUGrixVGN4")
+        .useStreamingApi()
+        .build();
+    }
+
     public static void main(String[] args) {
         // require authentication even if public streaming
         String accessToken = "ZiVgrWT06shZUPoOWkZD70cf7jRU7AAkqmUGrixVGN4";
