@@ -40,7 +40,7 @@ import uk.ac.man.cs.eventlite.entities.Event;
 public class VenuesController {
 
     // mapbox access token
-    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHg5NG92dTAwd2wyaXM0YTRydWh4dzAifQ.cILrNVVAjfJub-a66Y4rOA";
+    private static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHlnMHk0eDAwdHgyanIwY2c3dDV0bTEifQ.4QM0YZeknSfKTVhsmJ3pCg";
 
     @Autowired
     private VenueService venueService;
@@ -48,7 +48,7 @@ public class VenuesController {
     @Autowired
     private EventService eventService;
     
-    private double[] geocodeAddress(String address) {
+    double[] geocodeAddress(String address) {
         try {
             MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
                 .accessToken(MAPBOX_ACCESS_TOKEN)
@@ -92,6 +92,7 @@ public class VenuesController {
             System.err.println("Interrupted while geocoding: " + e.getMessage());
             Thread.currentThread().interrupt();
         }
+       
 
         return null;
     }
@@ -182,15 +183,6 @@ public class VenuesController {
         existingVenue.setName(venue.getName());
         existingVenue.setAddress(venue.getAddress());
         existingVenue.setCapacity(venue.getCapacity());
-        
-        // Get and set coordinates if the address was changed
-        if (!existingVenue.getAddress().equals(venue.getAddress())) {
-            double[] coordinates = geocodeAddress(venue.getAddress());
-            if (coordinates != null) {
-                existingVenue.setLongitude(coordinates[0]);
-                existingVenue.setLatitude(coordinates[1]);
-            }
-        }
 
         // Save the updated venue
         venueService.save(existingVenue);
