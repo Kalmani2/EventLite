@@ -51,7 +51,7 @@ public class HomeController {
         // Sort by values (descending order)
         sortedVenueEvents.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
     
-        model.addAttribute("events", allEvents);
+        model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", sortedVenueEvents);
 		
         return "index"; // This should match the name of your index.html in templates

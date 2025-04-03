@@ -38,9 +38,6 @@ public class EventsController {
 	@Autowired
 	private VenueService venueService;
 
-	@Autowired
-	private MastodonController mastodonController;
-
 	@ExceptionHandler(EventNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String eventNotFoundHandler(EventNotFoundException ex, Model model) {
@@ -66,11 +63,9 @@ public class EventsController {
 
 	@GetMapping
 	public String getAllEvents(Model model) {
+
 		model.addAttribute("events", eventService.findAll());
 		model.addAttribute("venues", venueService.findAll());
-		
-		// Add Mastodon timeline posts to the model
-		model.addAttribute("mastodonPosts", mastodonController.getTimelinePosts());
 
 		return "events/index";
 	}
