@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-
 import uk.ac.man.cs.eventlite.config.Security;
 import uk.ac.man.cs.eventlite.dao.EventService;
 import uk.ac.man.cs.eventlite.dao.VenueService;
@@ -48,7 +47,7 @@ public class VenuesControllerTest {
 
     @MockBean
     private EventService eventService; // used in deleteVenue
-    
+
     @SpyBean
     private VenuesController venuesController;
 
@@ -65,7 +64,7 @@ public class VenuesControllerTest {
         testVenue1.setId(1L);
         testVenue1.setName("Kilburn Building");
         testVenue1.setCapacity(1000);
-        testVenue1.setAddress("Oxford Rd, Manchester M13 9PL");
+        testVenue1.setAddress("Oxford Rd, Manchester, M13 9PL");
         testVenue1.setLatitude(53.467495);
         testVenue1.setLongitude(-2.234009);
 
@@ -73,7 +72,7 @@ public class VenuesControllerTest {
         testVenue2.setId(2L);
         testVenue2.setName("University Place");
         testVenue2.setCapacity(500);
-        testVenue2.setAddress("Oxford Rd, Manchester M13 9PL"); // Same address for simplicity
+        testVenue2.setAddress("Oxford Rd, Manchester, M13 9PL"); // Same address for simplicity
         testVenue2.setLatitude(53.467495);
         testVenue2.setLongitude(-2.234009);
     }
@@ -90,8 +89,7 @@ public class VenuesControllerTest {
                 .andExpect(model().attribute("venues", hasSize(2)))
                 .andExpect(model().attribute("venues", containsInAnyOrder(
                         hasProperty("name", is("Kilburn Building")),
-                        hasProperty("name", is("University Place"))
-                )));
+                        hasProperty("name", is("University Place")))));
 
         verify(venueService).findAll();
     }
@@ -186,15 +184,15 @@ public class VenuesControllerTest {
         // Assertions on the captured venue
         Venue savedVenue = venueCaptor.getValue();
         assertNotNull(savedVenue);
-        assert(savedVenue.getId() == venueId); // ID should not change
-        assert(savedVenue.getName().equals(updatedName));
-        assert(savedVenue.getCapacity() == updatedCapacity);
-        assert(savedVenue.getAddress().equals(testVenue1.getAddress())); // Address is the same
+        assert (savedVenue.getId() == venueId); // ID should not change
+        assert (savedVenue.getName().equals(updatedName));
+        assert (savedVenue.getCapacity() == updatedCapacity);
+        assert (savedVenue.getAddress().equals(testVenue1.getAddress())); // Address is the same
         // Coordinates should remain the original ones as address didn't change
-        assert(savedVenue.getLatitude().equals(testVenue1.getLatitude()));
-        assert(savedVenue.getLongitude().equals(testVenue1.getLongitude()));
+        assert (savedVenue.getLatitude().equals(testVenue1.getLatitude()));
+        assert (savedVenue.getLongitude().equals(testVenue1.getLongitude()));
     }
-    
+
     @Test
     public void testUpdateVenueNotFound() throws Exception {
         long venueId = 99L;
@@ -236,7 +234,8 @@ public class VenuesControllerTest {
     public void testCreateVenueSuccess() throws Exception {
         String newName = "New Test Venue";
         int newCapacity = 50;
-        String newAddress = "Kilburn Building, Oxford Road, M13 9PL";;
+        String newAddress = "Kilburn Building, Oxford Road, M13 9PL";
+        ;
 
         // Prepare form data
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -250,13 +249,12 @@ public class VenuesControllerTest {
             venueToSave.setId(100L); // Simulate setting an ID
             // Simulate potential coordinate setting by geocodeAddress
             if (venueToSave.getAddress().equals(newAddress)) {
-                 // Assume geocoding succeeded for this test case
-                 venueToSave.setLatitude(50.0);
-                 venueToSave.setLongitude(-1.0);
+                // Assume geocoding succeeded for this test case
+                venueToSave.setLatitude(50.0);
+                venueToSave.setLongitude(-1.0);
             }
             return venueToSave;
         });
-
 
         mvc.perform(post("/venues")
                 .with(user(USERNAME).password(PASSWORD).roles(Security.ADMIN_ROLE))
@@ -275,14 +273,14 @@ public class VenuesControllerTest {
         // Assertions on the captured venue
         Venue savedVenue = venueCaptor.getValue();
         assertNotNull(savedVenue);
-        assert(savedVenue.getName().equals(newName));
-        assert(savedVenue.getCapacity() == newCapacity);
-        assert(savedVenue.getAddress().equals(newAddress));
+        assert (savedVenue.getName().equals(newName));
+        assert (savedVenue.getCapacity() == newCapacity);
+        assert (savedVenue.getAddress().equals(newAddress));
         // Verify coordinates were set (simulated in the mock above)
         assertNotNull(savedVenue.getLatitude());
         assertNotNull(savedVenue.getLongitude());
-        assert(savedVenue.getLatitude() == 50.0);
-        assert(savedVenue.getLongitude() == -1.0);
+        assert (savedVenue.getLatitude() == 50.0);
+        assert (savedVenue.getLongitude() == -1.0);
     }
 
     @Test
