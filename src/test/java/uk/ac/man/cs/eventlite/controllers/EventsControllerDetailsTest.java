@@ -43,9 +43,10 @@ public class EventsControllerDetailsTest {
     @Test
     public void testGetEventDetailsFound() throws Exception {
         long eventId = 1L;
+        long venueId = 10L;
         
         Venue venue = new Venue();
-        venue.setId(10L);
+        venue.setId(venueId);
         venue.setName("Test Venue");
         venue.setAddress("Test Address");
         venue.setCapacity(100);
@@ -58,6 +59,7 @@ public class EventsControllerDetailsTest {
         event.setVenue(venue);
         
         when(eventService.findAll()).thenReturn(Arrays.asList(event));
+        when(venueService.findById(venueId)).thenReturn(venue); // Mock findById
         when(venueService.findAll()).thenReturn(Arrays.asList(venue));
         
         mvc.perform(get("/events/{id}/details", eventId)
@@ -69,7 +71,8 @@ public class EventsControllerDetailsTest {
            .andExpect(model().attribute("venues", hasItem(venue)));
         
         verify(eventService).findAll();
-        verify(venueService, atLeastOnce()).findAll();
+        verify(venueService).findById(venueId); 
+        verify(venueService).findAll();
     }
     
     @Test
@@ -84,5 +87,47 @@ public class EventsControllerDetailsTest {
         
         verify(eventService).findAll();
         verifyNoInteractions(venueService);
+    }
+    
+    @Test
+    public void testGetEventDetailsWithInvalidIdFormat() throws Exception {
+        mvc.perform(get("/events/abc/details")
+                .accept(MediaType.TEXT_HTML))
+           .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(eventService);
+        verifyNoInteractions(venueService);
+    }
+    
+    @Test
+    public void testGetEventDetailsWithNoVenue() throws Exception {
+        long eventId = 3L;
+
+        Event event = new Event();
+        event.setId(eventId);
+        event.setName("Event Without Venue");
+        event.setDate(LocalDate.now().plusDays(1));
+        event.setTime(LocalTime.of(12, 0));
+        event.setVenue(null); // No venue
+
+        Venue venue = new Venue();
+        venue.setId(10L);
+        venue.setName("Test Venue");
+
+        when(eventService.findAll()).thenReturn(Arrays.asList(event));
+        when(venueService.findAll()).thenReturn(Arrays.asList(venue));
+
+        mvc.perform(get("/events/{id}/details", eventId)
+                .accept(MediaType.TEXT_HTML))
+           .andExpect(status().isOk())
+           .andExpect(view().name("events/event_details"))
+           .andExpect(model().attribute("event", hasProperty("id", is(eventId))))
+           .andExpect(model().attribute("event", hasProperty("venue", nullValue())))
+           .andExpect(model().attribute("venue", nullValue()))
+           .andExpect(model().attribute("venues", hasItem(venue)));
+
+        verify(eventService).findAll();
+        verify(venueService).findAll();
+        verifyNoMoreInteractions(venueService); // findById not called since venue is null
     }
 }

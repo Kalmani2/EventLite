@@ -45,11 +45,13 @@ public class VenuesControllerApi {
     private EventService eventService;
 
     @ExceptionHandler(VenueNotFoundException.class)
-    public ResponseEntity<?> venueNotFoundHandler(VenueNotFoundException ex) {
+    public ResponseEntity<String> venueNotFoundHandler(VenueNotFoundException ex) {
+        String errorBody = String.format("{ \"error\": \"%s\", \"id\": %d }", ex.getMessage(), ex.getId());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(String.format(NOT_FOUND_MSG, ex.getMessage(), ex.getId()));
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(errorBody);
     }
-
+    
     @GetMapping
     public CollectionModel<EntityModel<Venue>> getAllVenues() {
         Iterable<Venue> venues = venueService.findAll();
