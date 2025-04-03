@@ -62,11 +62,9 @@ public class VenuesControllerApi {
                         linkTo(methodOn(VenuesControllerApi.class).getVenueEvents(venue.getId())).withRel("events"),
                         linkTo(methodOn(VenuesControllerApi.class).getVenueNext3Events(venue.getId())).withRel("next3events")))
                 .collect(Collectors.toList());
-        CollectionModel<EntityModel<Venue>> collectionModel = CollectionModel.of(resources,
-                linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel());;
-        System.out.println("CollectionModel2: " + collectionModel);
         
-        return collectionModel;
+        return CollectionModel.of(resources,
+                linkTo(methodOn(VenuesControllerApi.class).getAllVenues()).withSelfRel());
     }
 
     @GetMapping("/{id}")
