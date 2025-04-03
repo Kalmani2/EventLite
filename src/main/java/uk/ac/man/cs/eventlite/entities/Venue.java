@@ -3,6 +3,7 @@ package uk.ac.man.cs.eventlite.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import uk.ac.man.cs.eventlite.validator.ValidAddress;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "venues")
@@ -16,6 +17,7 @@ public class Venue {
     @Size(max = 256)
     private String name;
 
+    @Min(1)
     private int capacity;
 
     // Expects <road address, postcode> as input
@@ -26,7 +28,7 @@ public class Venue {
 
     @Column(name = "latitude", nullable = true)
     private Double latitude;
-    
+
     @Column(name = "longitude", nullable = true)
     private Double longitude;
 
