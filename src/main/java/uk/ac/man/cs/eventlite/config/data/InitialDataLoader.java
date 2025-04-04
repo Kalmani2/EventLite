@@ -74,11 +74,21 @@ public class InitialDataLoader {
                 Venue kilburn = venueService.findById(2);
                 Venue crawford = venueService.findById(3);
 
-                String[] eventNames = { "Concert1", "Event Alpha", "Beta", "Apple", "Former", "Previous", "Past" };
+                String[] eventNames = { "Concert1", "Event Alpha", "Event Beta", "Apple Event", "Former", "Previous", "Past" };
                 String[] eventDate = { "2025-01-01", "2025-07-11", "2025-07-11", "2025-07-12", "2025-01-11",
                         "2025-01-11", "2025-01-10" };
-                String[] eventTime = { "08:00", "12:30", "10:00", null, "11:00", "18:30", "17:00" };
+                String[] eventTime = { "08:00", "12:30", "10:00", "12:00", "11:00", "18:30", "17:00" };
                 Venue[] eventVenue = { oldTrafford, crawford, kilburn, kilburn, crawford, kilburn, kilburn };
+
+                String[] eventDescriptions = {
+                    "A grand concert at Old Trafford.",
+                    "An exciting event at Crawford House.",
+                    "A beta testing event at Kilburn Building.",
+                    "Apple product launch at Kilburn Building.",
+                    "A former event at Crawford House.",
+                    "A previous event at Kilburn Building.",
+                    "A past event at Kilburn Building."
+                };
 
                 for (int i = 0; i < eventNames.length; i++) {
                     Event event = new Event();
@@ -87,6 +97,7 @@ public class InitialDataLoader {
                     event.setDate(LocalDate.parse(eventDate[i]));
                     event.setTime(LocalTime.parse(eventTime[i]));
                     event.setVenue(eventVenue[i]);
+                    event.setDescription(eventDescriptions[i]);
                     eventService.save(event);
                 }
 

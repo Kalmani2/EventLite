@@ -17,7 +17,7 @@ public class Venue {
     @Size(max = 256)
     private String name;
 
-    @Min(1)
+    @Min(value = 1, message = "Capacity must be at least 1")
     private int capacity;
 
     // Expects <road address, postcode> as input
