@@ -402,7 +402,7 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     	List<Event> events = Arrays.asList(new Event(), new Event());
         when(eventRepository.findAllByOrderByDateAscTimeAsc()).thenReturn(events);
         
-        List<Event> result = eventRepository.findAllByOrderByDateAscTimeAsc();
+        List<Event> result = eventService.findAllOrderedByDateAndName();
         assertNotNull(result);
         assertEquals(2, ((List<Event>) result).size());
         verify(eventRepository).findAllByOrderByDateAscTimeAsc();
