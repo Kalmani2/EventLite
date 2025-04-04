@@ -117,6 +117,14 @@ public class VenuesController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found");
         }
 
+        List<Event> upcomingEvents = getUpcomingEvents(id, model);
+        
+        model.addAttribute("venue", venue);
+        model.addAttribute("upcomingEvents", upcomingEvents);
+        return "venues/venue_details";
+    }
+    
+    public List<Event> getUpcomingEvents(@PathVariable("id") long id, Model model) {
         Iterable<Event> allEvents = eventService.findAll();
 
         List<Event> venueEvents = new ArrayList<>();
@@ -144,9 +152,8 @@ public class VenuesController {
             return e1.getDate().compareTo(e2.getDate());
         });
 
-        model.addAttribute("venue", venue);
-        model.addAttribute("upcomingEvents", upcomingEvents);
-        return "venues/venue_details";
+
+        return upcomingEvents;
     }
 
     @DeleteMapping("/{id}")
@@ -171,8 +178,14 @@ public class VenuesController {
     }
 
     @PutMapping("/{id}")
-    public String updateVenue(@PathVariable("id") long id, @ModelAttribute Venue venue,
-            RedirectAttributes redirectAttrs) {
+    public String updateVenue(@PathVariable("id") long id, @Valid @ModelAttribute Venue venue, BindingResult bindingResult,
+            RedirectAttributes redirectAttrs, Model model) {
+    	if (bindingResult.hasErrors()) {
+    		model.addAttribute("venue", venue);
+    		model.addAttribute("upcomingEvents", getUpcomingEvents(id, model));
+    	    redirectAttrs.addFlashAttribute("error", "Venue update failed.");
+            return "redirect:/venues";	
+        }
         // Retrieve the existing venue
         Venue existingVenue = venueService.findById(id);
         if (existingVenue == null) {

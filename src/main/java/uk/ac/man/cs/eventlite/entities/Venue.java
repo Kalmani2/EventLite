@@ -14,7 +14,7 @@ public class Venue {
     private long id;
 
     @Column(name = "name", nullable = false)
-    @Size(max = 256)
+    @Size(max = 256, message = "Name must be less than 256 characters")
     private String name;
 
     @Min(value = 1, message = "Capacity must be at least 1")
