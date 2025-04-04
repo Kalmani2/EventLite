@@ -187,4 +187,23 @@ public class EventsControllerApiTest {
 	        .andExpect(jsonPath("$.capacity", equalTo(100)))
 	        .andExpect(jsonPath("$._links.self.href", endsWith("/api/venues/1")));
 	}
+	
+	@Test
+	public void getVenueForEventWhenEventDoesNotExist() throws Exception {
+	    Venue venue = new Venue();
+	    venue.setId(1L);
+	    venue.setName("Test Venue");
+	    venue.setCapacity(100);
+
+	    Event event = new Event();
+	    event.setId(1L);
+	    event.setName("Test Event");
+	    event.setVenue(null);
+
+	    when(eventService.findById(1L)).thenReturn(Optional.of(event));
+
+	    // Act & Assert: Perform GET request and verify response
+	    mvc.perform(get("/api/events/1/venue").accept(MediaType.APPLICATION_JSON))
+	        .andExpect(status().isNotFound());
+	}
 }
