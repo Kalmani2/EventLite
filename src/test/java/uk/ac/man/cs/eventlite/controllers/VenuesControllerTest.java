@@ -76,7 +76,13 @@ public class VenuesControllerTest {
         testVenue2.setLatitude(53.467495);
         testVenue2.setLongitude(-2.234009);
     }
-
+    
+    
+    
+    @Test
+    public void testGeoCaching() throws Exception {
+    	
+    }
     @Test
     public void testGetAllVenuesWithResults() throws Exception {
         List<Venue> venues = Arrays.asList(testVenue1, testVenue2);
@@ -195,12 +201,41 @@ public class VenuesControllerTest {
 
     @Test
     public void testUpdateVenueNotFound() throws Exception {
-        long venueId = 99L;
-        when(venueService.findById(venueId)).thenReturn(null); // Venue does not exist
+    	long venueId = 99L;
+        String updatedName = "Kilburn Building Updated";
+        int updatedCapacity = 1200;
+
+        when(venueService.findById(venueId)).thenReturn(null); 
+
+        // Prepare form data
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("name", updatedName);
+        params.add("capacity", String.valueOf(updatedCapacity));
+        params.add("address", testVenue1.getAddress()); 
+
+        mvc.perform(put("/venues/{id}", venueId)
+                .with(user(USERNAME).password(PASSWORD).roles(Security.ADMIN_ROLE))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .params(params)
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isNotFound());
+
+        verify(venueService).findById(venueId);
+        verify(venueService, never()).save(any(Venue.class)); // Save should not be called
+    }
+    
+    @Test
+    public void testUpdateVenueParamInvalid() throws Exception {
+    	long venueId = 1L;
+        String updatedName = "Kilburn Building Updated";
+        int updatedCapacity = 1200;
+
+        when(venueService.findById(venueId)).thenReturn(testVenue1); 
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("name", "Doesn't Matter");
-        params.add("capacity", "100");
+        params.add("capacity", "-1");
         params.add("address", "Any Address");
 
         mvc.perform(put("/venues/{id}", venueId)
@@ -211,7 +246,6 @@ public class VenuesControllerTest {
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection());
 
-        verify(venueService).findById(venueId);
         verify(venueService, never()).save(any(Venue.class)); // Save should not be called
     }
 
