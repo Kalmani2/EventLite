@@ -16,14 +16,21 @@
             // Get events data from Thymeleaf
             const events = /*[[${events}]]*/ [];
             
-            if (events.length > 0) {
+            const now = new Date();
+            const upcomingEvents = events.filter(event => {
+                const eventDate = new Date(event.date);
+                const eventTime = event.time ? new Date(`1970-01-01T${event.time}`) : null;
+                return eventDate > now || (eventDate.toDateString() === now.toDateString() && eventTime && eventTime > now);
+            });
+            
+            if (upcomingEvents.length > 0) {
                 // Initialize Mapbox
                 mapboxgl.accessToken = 'pk.eyJ1Ijoia2FsbWFuaS1tYW5jaGVzdGVyIiwiYSI6ImNtOHlnMHk0eDAwdHgyanIwY2c3dDV0bTEifQ.4QM0YZeknSfKTVhsmJ3pCg';
                 
                 try {
-                    // Calculate bounds to show all events
+                    // Calculate bounds to show all upcoming events
                     const bounds = new mapboxgl.LngLatBounds();
-                    events.forEach(event => {
+                    upcomingEvents.forEach(event => {
                         if (event.venue && event.venue.longitude && event.venue.latitude) {
                             bounds.extend([event.venue.longitude, event.venue.latitude]);
                         }
@@ -39,8 +46,8 @@
                         }
                     });
                     
-                    // Add markers for each event
-                    events.forEach(event => {
+                    // Add markers for each upcoming event
+                    upcomingEvents.forEach(event => {
                         if (event.venue && event.venue.longitude && event.venue.latitude) {
                             const popup = new mapboxgl.Popup({ offset: 25 })
                                 .setHTML(`
