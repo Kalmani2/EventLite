@@ -2,6 +2,7 @@ package uk.ac.man.cs.eventlite.controllers;
 
 
 import java.time.LocalDate;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Optional;
@@ -31,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
 import uk.ac.man.cs.eventlite.config.Security;
@@ -40,6 +43,8 @@ import uk.ac.man.cs.eventlite.entities.Venue;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
+
 import uk.ac.man.cs.eventlite.assemblers.EventModelAssembler;
 import uk.ac.man.cs.eventlite.exceptions.EventNotFoundException;
 
@@ -56,6 +61,10 @@ public class EventsControllerApiTest {
 	
 //	@MockBean
 //    private EventModelAssembler eventAssembler;
+	
+	// creds for authenticated requests
+    private final String USERNAME = "Markel";
+    private final String PASSWORD = "Vigo";
 
 	@Test
 	public void getIndexWhenNoEvents() throws Exception {
@@ -156,5 +165,26 @@ public class EventsControllerApiTest {
 		
 	}
 	
+	@Test
+	public void getVenueForEventWhenEventExistsAndHasVenue() throws Exception {
+	    Venue venue = new Venue();
+	    venue.setId(1L);
+	    venue.setName("Test Venue");
+	    venue.setCapacity(100);
 
+	    Event event = new Event();
+	    event.setId(1L);
+	    event.setName("Test Event");
+	    event.setVenue(venue);
+
+	    when(eventService.findById(1L)).thenReturn(Optional.of(event));
+
+	    // Act & Assert: Perform GET request and verify response
+	    mvc.perform(get("/api/events/1/venue").accept(MediaType.APPLICATION_JSON))
+	        .andExpect(status().isOk())
+	        .andExpect(handler().methodName("getVenueForEvent"))
+	        .andExpect(jsonPath("$.name", equalTo("Test Venue")))
+	        .andExpect(jsonPath("$.capacity", equalTo(100)))
+	        .andExpect(jsonPath("$._links.self.href", endsWith("/api/venues/1")));
+	}
 }
