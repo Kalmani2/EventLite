@@ -79,30 +79,29 @@ public class EventsControllerApiIntegrationTest {
 	// Sensible Data
 	@Test
 	public void testCreateEventSensibleData() {
-		// Prepare a valid venue and dummy event response.
-		Venue venue = new Venue();
-		venue.setId(1);
-		venue.setName("Test Venue");
-		when(venueService.findById(1L)).thenReturn(venue);
+	    Venue venue = new Venue();
+	    venue.setId(1);
+	    venue.setName("Test Venue");
 
-		Event event = new Event();
-		event.setId(1);
-		event.setName("New Event");
-		event.setDate(LocalDate.now().plusDays(10));
-		event.setTime(LocalTime.of(12, 0));
-		event.setDescription("A sensible new event");
-		event.setVenue(venue);
-		when(eventService.addEvent(any(Event.class))).thenReturn(event);
+	    Event event = new Event();
+	    event.setId(1);
+	    event.setName("New Event");
+	    event.setDate(LocalDate.now().plusDays(10));
+	    event.setTime(LocalTime.of(12, 0));
+	    event.setDescription("A sensible new event");
+	    event.setVenue(venue);
 
-		client.post().uri("/api/events")
-				.headers(headers -> headers.setBasicAuth(USERNAME, PASSWORD))
-				.contentType(MediaType.APPLICATION_JSON)
-				.bodyValue("{\"venueId\":1, \"name\":\"New Event\", \"date\":\"" + event.getDate().toString()
-						+ "\", \"time\":\"12:00:00\", \"description\":\"A sensible new event\"}")
-				.accept(MediaType.APPLICATION_JSON)
-				.exchange()
-				.expectStatus().isEqualTo(HttpStatus.CREATED)
-				.expectHeader().value("Location", value -> value.contains("/api/events/"));
+	    when(eventService.save(any(Event.class))).thenReturn(event);
+
+	    client.post().uri("/api/events")
+	        .headers(headers -> headers.setBasicAuth(USERNAME, PASSWORD))
+	        .contentType(MediaType.APPLICATION_JSON)
+	        .bodyValue("{\"name\":\"New Event\", \"date\":\"" + event.getDate().toString() + "\", \"time\":\"12:00:00\", \"description\":\"A sensible new event\", \"venue\":{\"id\":1, \"name\":\"Test Venue\"}}")
+	        .accept(MediaType.APPLICATION_JSON)
+	        .exchange()
+	        .expectStatus().isCreated() // Expect 201 Created
+	        .expectBody()
+	        .jsonPath("$.name").isEqualTo("New Event");
 	}
 
 	// Missing Data (e.g., missing required 'name')

@@ -3,6 +3,8 @@ package uk.ac.man.cs.eventlite.controllers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -90,5 +94,21 @@ public class EventsControllerApi {
 		return EntityModel.of(event.getVenue(),
 				linkTo(methodOn(VenuesControllerApi.class).getVenue(event.getVenue().getId())).withSelfRel());
 	}
+	
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE) // Specify that it consumes JSON
+    public ResponseEntity<?> createEvent(@RequestBody Event event) { // Use @RequestBody to read the JSON body
+
+        if (event.getName() == null || event.getDate() == null || event.getVenue() == null) {
+            return ResponseEntity.badRequest().body("{\"error\": \"Event name, date, and venue must be provided.\"}");
+        }
+
+        Event savedEvent = eventService.save(event); // Use the appropriate service method
+
+        EntityModel<Event> entityModel = eventAssembler.toModel(savedEvent);
+
+        URI location = entityModel.getRequiredLink("self").toUri();
+
+        return ResponseEntity.created(location).body(entityModel);
+    }
 
 }
