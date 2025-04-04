@@ -290,6 +290,44 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
     }
     
     @Test
+    public void testDeleteAllNoParam() throws Exception {
+    	Venue venue = new Venue();
+        venue.setId(1);
+        venue.setName("Test Venue");
+        venue.setCapacity(100);
+
+        String eventName = "Test Event";
+        String eventDate = "2025-12-25";
+        String eventTime = "10:30";
+
+        Event event = new Event();
+        event.setName(eventName);
+        event.setDate(LocalDate.parse(eventDate));
+        event.setTime(LocalTime.parse(eventTime));
+        event.setVenue(venue);
+        
+        Event eventTwo = new Event();
+        eventTwo.setName(eventName);
+        eventTwo.setDate(LocalDate.parse(eventDate));
+        eventTwo.setTime(LocalTime.parse(eventTime));
+        eventTwo.setVenue(venue);
+       
+        eventService.save(event);
+        eventService.save(eventTwo);
+        Iterable<Event> result = eventService.findAll();
+        assertNotNull(result);
+        assertEquals(0, ((List<Event>) result).size());
+        
+        eventService.deleteAll();
+        
+        result = eventService.findAll();
+        assertNotNull(result);
+        assertEquals(0, ((List<Event>) result).size());
+        
+        verify(eventRepository).deleteAll();
+    }
+    
+    @Test
     public void testDeleteAll() throws Exception {
     	Venue venue = new Venue();
         venue.setId(1);
@@ -311,9 +349,6 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         eventTwo.setDate(LocalDate.parse(eventDate));
         eventTwo.setTime(LocalTime.parse(eventTime));
         eventTwo.setVenue(venue);
-        
-        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
-        when(eventRepository.findById(2L)).thenReturn(Optional.of(eventTwo));
         
         List<Event> events = Arrays.asList(event, eventTwo);
         eventService.deleteAll(events);
@@ -359,6 +394,18 @@ public class EventServiceTest extends AbstractTransactionalJUnit4SpringContextTe
         assertEquals(0, ((List<Event>) result).size());
         
         verify(eventRepository).deleteAllById(ids);
+    }
+    
+    @Test 
+    public void testFindAllOrderedByDateAndName() throws Exception {
+        
+    	List<Event> events = Arrays.asList(new Event(), new Event());
+        when(eventRepository.findAllByOrderByDateAscTimeAsc()).thenReturn(events);
+        
+        List<Event> result = eventRepository.findAllByOrderByDateAscTimeAsc();
+        assertNotNull(result);
+        assertEquals(2, ((List<Event>) result).size());
+        verify(eventRepository).findAllByOrderByDateAscTimeAsc();
     }
     
     @Test
