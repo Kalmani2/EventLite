@@ -209,7 +209,7 @@ public class VenuesControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .params(params)
                 .accept(MediaType.TEXT_HTML))
-                .andExpect(status().isNotFound());
+                .andExpect(status().is3xxRedirection());
 
         verify(venueService).findById(venueId);
         verify(venueService, never()).save(any(Venue.class)); // Save should not be called
