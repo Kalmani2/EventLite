@@ -5,9 +5,11 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -81,6 +83,7 @@ public class EventsControllerAddTest {
         when(eventService.findById(any(Long.class))).thenReturn(Optional.of(event));
 
         mvc.perform(post("/events")
+                .with(user(USERNAME).password(PASSWORD).roles(Security.ADMIN_ROLE)) // Authenticate
         		.with(csrf()) 
                 .param("venueId", "1")
                 .param("name", eventName)
@@ -117,6 +120,8 @@ public class EventsControllerAddTest {
         when(eventService.findById(any(Long.class))).thenReturn(Optional.of(event));
 
         mvc.perform(post("/events")
+                .with(user(USERNAME).password(PASSWORD).roles(Security.ADMIN_ROLE))
+                .with(csrf())
                 .param("venueId", "1")
                 .param("name", eventName)
                 .param("date", eventDate)
