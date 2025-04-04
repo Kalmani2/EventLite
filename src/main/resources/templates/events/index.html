@@ -43,9 +43,16 @@
                     events.forEach(event => {
                         if (event.venue && event.venue.longitude && event.venue.latitude) {
                             const popup = new mapboxgl.Popup({ offset: 25 })
-                                .setHTML(`<h5>${event.name}</h5><p>${event.date} ${event.time || ''}</p>`);
+                                .setHTML(`
+                                  <div style="padding: 5px; text-align: center;">
+                                    <h5 style="margin-bottom: 8px; color: #333; font-weight: 600;">${event.name}</h5>
+                                    <p style="margin: 0; color: #666; font-size: 14px;">
+                                      ${event.time ? `Starts at ${event.time}` : 'Time not specified'}
+                                    </p>
+                                  </div>
+                                `);
                             
-                            new mapboxgl.Marker({ color: '#E02040' })
+                            new mapboxgl.Marker({ color: '#007AFF' })
                                 .setLngLat([event.venue.longitude, event.venue.latitude])
                                 .setPopup(popup)
                                 .addTo(map);

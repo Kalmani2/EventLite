@@ -40,9 +40,16 @@
           
           // Add a marker at the venue location
           const popup = new mapboxgl.Popup({ offset: 25 })
-            .setHTML(`<h5>${eventName}</h5><p>Starts at ${eventTime}</p>`);
+            .setHTML(`
+              <div style="padding: 5px; text-align: center;">
+                <h5 style="margin-bottom: 8px; color: #333; font-weight: 600;">${eventName}</h5>
+                <p style="margin: 0; color: #666; font-size: 14px;">
+                  ${eventTime ? `Starts at ${eventTime}` : 'Time not specified'}
+                </p>
+              </div>
+            `);
             
-          new mapboxgl.Marker({ color: '#E02040' })
+          new mapboxgl.Marker({ color: '#007AFF' })
             .setLngLat([longitude, latitude])
             .setPopup(popup)
             .addTo(map);
